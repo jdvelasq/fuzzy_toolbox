@@ -1,2 +1,3 @@
-# fuzzyis
-Fuzzy Inference Systems package
+# FuzzyIS
+
+Fuzzy Inference Systems in Python
