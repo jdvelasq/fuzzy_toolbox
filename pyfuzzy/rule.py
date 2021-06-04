@@ -16,11 +16,11 @@ class FuzzyRule:
         self.output = None
 
     def __repr__(self):
-        text = "IF\n"
+        text = "IF  "
         space = " " * 4
         for i, var in enumerate(self.antecedents):
             if i == 0:
-                text += space + var[0].name + " IS " + var[1] + "\n"
+                text += var[0].name + " IS " + var[1] + "\n"
             else:
                 text += space + "AND " + var[0].name + " IS " + var[1] + "\n"
 
