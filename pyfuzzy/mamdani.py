@@ -1,4 +1,4 @@
-from .rule import Rule
+from .rule import FuzzyRule
 from .variable import FuzzyVariable
 
 

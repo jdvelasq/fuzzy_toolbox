@@ -3,7 +3,7 @@ import numpy as np
 from .variable import FuzzyVariable
 
 
-class Rule:
+class FuzzyRule:
     def __init__(
         self,
         antecedents,
