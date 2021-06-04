@@ -15,6 +15,19 @@ class FuzzyRule:
         self.combined_input = None
         self.output = None
 
+    def __repr__(self):
+        text = "IF\n"
+        space = " " * 4
+        for i, var in enumerate(self.antecedents):
+            if i == 0:
+                text += space + var[0].name + " IS " + var[1] + "\n"
+            else:
+                text += space + "AND " + var[0].name + " IS " + var[1] + "\n"
+
+        text += "THEN\n"
+        text += space + self.get_consequent_name() + " IS " + self.consequent[1]
+        return text
+
     def get_consequent_universe(self):
         return self.consequent[0].universe
 
@@ -67,3 +80,51 @@ class FuzzyRule:
             universe=self.get_consequent_universe(),
             sets={"rule_output": membership},
         )
+
+
+# score = FuzzyVariable(
+#     name="score",
+#     universe=np.arange(start=150, stop=201, step=5),
+#     sets={
+#         "High": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.7, 1.0, 1.0, 1.0],
+#         "Low": [1.0, 1.0, 0.8, 0.5, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#     },
+# )
+
+# ratio = FuzzyVariable(
+#     name="ratio",
+#     universe=[0.1, 0.3, 0.40, 0.41, 0.42, 0.43, 0.44, 0.45, 0.5, 0.7, 1.0],
+#     sets={
+#         "Goodr": [1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0, 0],
+#         "Badr": [0, 0, 0, 0, 0, 0, 0, 0.3, 0.7, 1.0, 1.0],
+#     },
+# )
+
+# credit = FuzzyVariable(
+#     name="credit",
+#     universe=list(range(11)),
+#     sets={
+#         "Goodc": [1, 1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0],
+#         "Badc": [0, 0, 0, 0, 0, 0, 0.3, 0.7, 1, 1, 1],
+#     },
+# )
+
+# decision = FuzzyVariable(
+#     name="decision",
+#     universe=list(range(11)),
+#     sets={
+#         "Approve": [0, 0, 0, 0, 0, 0, 0.3, 0.7, 1, 1, 1],
+#         "Reject": [1, 1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0],
+#     },
+# )
+
+# rule_1 = FuzzyRule(
+#     antecedents=[
+#         (score, "High"),
+#         (ratio, "Goodr"),
+#         (credit, "Goodc"),
+#     ],
+#     consequent=(decision, "Approve"),
+# )
+
+# print(rule_1)
