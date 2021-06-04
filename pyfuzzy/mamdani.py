@@ -1,5 +1,5 @@
 from .rule import Rule
-from variable import LinguisticVariable
+from .variable import LinguisticVariable
 
 
 class Mamdani:
