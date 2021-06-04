@@ -116,7 +116,7 @@ class FuzzyVariable:
 
 
         """
-        plt.new()
+        plt.clf()
         plt.figure(figsize=figsize)
         for k in self.sets.keys():
             plt.plot(self.universe, self.sets[k], "o-", label=k)
