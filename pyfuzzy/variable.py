@@ -117,23 +117,17 @@ class FuzzyVariable:
 
         """
 
-        # plt.figure(figsize=figsize)
-        ax = plt.gca()
+        plt.figure(figsize=figsize)
         for k in self.sets.keys():
-            ax.plot(self.universe, self.sets[k], "o-", label=k)
-        ax.legend()
-        ax.set_title(self.name)
-        ax.set_ylim(-0.05, 1.05)
-        # plt.gca().spines["left"].set_color("lightgray")
-        # plt.gca().spines["bottom"].set_color("gray")
-        # plt.gca().spines["top"].set_visible(False)
-        # plt.gca().spines["right"].set_visible(False)
-
-        ax.spines["left"].set_color("lightgray")
-        ax.spines["bottom"].set_color("gray")
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
-        return ax
+            plt.plot(self.universe, self.sets[k], "o-", label=k)
+        plt.legend()
+        plt.title(self.name)
+        plt.ylim(-0.05, 1.05)
+        plt.gca().spines["left"].set_color("lightgray")
+        plt.gca().spines["bottom"].set_color("gray")
+        plt.gca().spines["top"].set_visible(False)
+        plt.gca().spines["right"].set_visible(False)
+        plt.show()
 
     def membership(self, value, fuzzyset):
         """Computes the valor of the membership function on a specifyied point of the universe for the fuzzy set.
