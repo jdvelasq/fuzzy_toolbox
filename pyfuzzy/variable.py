@@ -116,6 +116,10 @@ class FuzzyVariable:
         plt.legend()
         plt.title(self.name)
         plt.ylim(-0.05, 1.05)
+        plt.gca().spines["left"].set_color("lightgray")
+        plt.gca().spines["bottom"].set_color("gray")
+        plt.gca().spines["top"].set_visible(False)
+        plt.gca().spines["right"].set_visible(False)
 
     def membership(self, value, fuzzyset):
         """Computes the valor of the membership function on a specifyied point of the universe for the fuzzy set.
