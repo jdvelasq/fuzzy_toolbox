@@ -24,7 +24,7 @@ class FuzzyRule:
     def get_consequent_name(self):
         return self.consequent[0].name
 
-    def compute_rule(self, and_operator, implication_operator, **values):
+    def compute_inference(self, and_operator, implication_operator, **values):
         self.compute_memberships(**values)
         self.combine_inputs(and_operator)
         self.compute_implication(implication_operator)
