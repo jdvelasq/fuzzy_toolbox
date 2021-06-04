@@ -1,6 +1,6 @@
 import numpy as np
 
-from variable import LinguisticVariable
+from .variable import LinguisticVariable
 
 
 class Rule:
