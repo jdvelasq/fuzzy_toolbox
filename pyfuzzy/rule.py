@@ -76,7 +76,7 @@ class FuzzyRule:
             membership = np.array(self.combined_input) * membership
 
         self.output = FuzzyVariable(
-            name=self.get_consequent_name(),
+            name="Implication",
             universe=self.get_consequent_universe(),
             sets={"rule_output": membership},
         )
