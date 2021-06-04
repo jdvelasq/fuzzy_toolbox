@@ -37,7 +37,7 @@ class Mamdani:
         # operador de composición especificado.
         #
         for rule in self.rules:
-            rule.compute_rule(
+            rule.compute_inference(
                 and_operator=self.and_operator,
                 implication_operator=self.implication_operator,
                 **self.values
