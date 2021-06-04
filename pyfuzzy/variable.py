@@ -81,7 +81,7 @@ def zmf(x, a, b):
     )
 
 
-class LinguisticVariable:
+class FuzzyVariable:
     """Creates a linguistic variable.
 
     Args:

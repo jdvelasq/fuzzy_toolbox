@@ -1,5 +1,5 @@
 from .rule import Rule
-from .variable import LinguisticVariable
+from .variable import FuzzyVariable
 
 
 class Mamdani:
@@ -51,7 +51,7 @@ class Mamdani:
         #
         for i_rule, rule in enumerate(self.rules):
             if i_rule == 0:
-                self.output = LinguisticVariable(
+                self.output = FuzzyVariable(
                     name="output",
                     universe=rule.output.universe,
                     sets={"rule_{}".format(i_rule): rule.output.sets["rule_output"]},

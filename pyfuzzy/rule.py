@@ -1,6 +1,6 @@
 import numpy as np
 
-from .variable import LinguisticVariable
+from .variable import FuzzyVariable
 
 
 class Rule:
@@ -62,7 +62,7 @@ class Rule:
         if implication_operator == "prod":
             membership = np.array(self.combined_input) * membership
 
-        self.output = LinguisticVariable(
+        self.output = FuzzyVariable(
             name=self.get_consequent_name(),
             universe=self.get_consequent_universe(),
             sets={"rule_output": membership},
