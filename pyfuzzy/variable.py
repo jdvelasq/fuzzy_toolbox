@@ -122,8 +122,8 @@ class FuzzyVariable:
         for k in self.sets.keys():
             ax.plot(self.universe, self.sets[k], "o-", label=k)
         ax.legend()
-        ax.title(self.name)
-        ax.ylim(-0.05, 1.05)
+        ax.set_title(self.name)
+        ax.set_ylim(-0.05, 1.05)
         # plt.gca().spines["left"].set_color("lightgray")
         # plt.gca().spines["bottom"].set_color("gray")
         # plt.gca().spines["top"].set_visible(False)
