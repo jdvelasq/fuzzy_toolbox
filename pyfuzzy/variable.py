@@ -99,6 +99,12 @@ class FuzzyVariable:
         self.universe = universe
         self.sets = sets
 
+    def __getitem__(self, key):
+        return self.sets[key]
+
+    def __setitem__(self, key, value):
+        self.sets[key] = value
+
     def plot(self, figsize=(10, 3)):
         """Plots the fuzzy sets defined for the variable.
 

@@ -11,7 +11,7 @@ class Mamdani:
         and_operator="min",
         implication_operator="min",
         aggregation_operator="max",
-        defuzzification_operator="CoG",
+        defuzzification_operator="cog",
     ):
         self.rules = rules
         self.and_operator = and_operator
