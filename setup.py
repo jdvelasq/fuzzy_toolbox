@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(
-    name="`pyfuzzy`",
+    name="pyfuzzy",
     version="0.1.0",
     author="Juan D. Velasquez",
     author_email="jdvelasq@unal.edu.co",
