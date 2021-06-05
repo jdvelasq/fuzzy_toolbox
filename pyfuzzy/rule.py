@@ -18,14 +18,23 @@ class FuzzyRule:
     def __repr__(self):
         text = "IF  "
         space = " " * 4
-        for i, var in enumerate(self.antecedents):
+        for i, antecedent in enumerate(self.antecedents):
+
             if i == 0:
-                text += var[0].name + " IS " + var[1] + "\n"
+                text += antecedent[0].name + " IS"
+                for k in range(1, len(antecedent)):
+                    text += " " + antecedent[k]
+                text += "\n"
             else:
-                text += space + "AND " + var[0].name + " IS " + var[1] + "\n"
+                text += space + "AND " + antecedent[0].name + " IS"
+                for k in range(1, len(antecedent)):
+                    text += " " + antecedent[k]
+                text += "\n"
 
         text += "THEN\n"
-        text += space + self.get_consequent_name() + " IS " + self.consequent[1]
+        text += space + self.get_consequent_name() + " IS"
+        for k in range(1, len(self.consequent)):
+            text += " " + self.consequent[k]
         return text
 
     def get_consequent_universe(self):
@@ -44,11 +53,29 @@ class FuzzyRule:
 
     def compute_memberships(self, **values):
         self.memberships = []
-        for fuzzyvar, fuzzyset in self.antecedents:
-            if fuzzyvar.name in values.keys():
-                crisp_value = values[fuzzyvar.name]
-                membership = fuzzyvar.membership(crisp_value, fuzzyset)
-                self.memberships.append(membership)
+
+        for antecedent in self.antecedents:
+
+            if len(antecedent) == 2:
+                fuzzyvar, fuzzyset = antecedent
+                modifier = None
+                negation = False
+
+            if len(antecedent) == 3:
+                fuzzyvar, modifier, fuzzyset = antecedent
+                if modifier.upper() == "NOT":
+                    modifier = None
+                    negation = True
+                else:
+                    negation = False
+
+            if len(antecedent) == 4:
+                fuzzyvar, negation, modifier, fuzzyset = antecedent
+                negation = True
+
+            crisp_value = values[fuzzyvar.name]
+            membership = fuzzyvar.membership(crisp_value, fuzzyset, modifier, negation)
+            self.memberships.append(membership)
 
     def combine_inputs(self, and_operator):
 

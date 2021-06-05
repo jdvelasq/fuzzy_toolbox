@@ -101,12 +101,14 @@ class FuzzyVariable:
             self.sets = {}
         else:
             self.sets = sets
+            for key in sets.keys():
+                self.sets[key] = np.array(self.sets[key])
 
     def __getitem__(self, key):
         return self.sets[key]
 
     def __setitem__(self, key, value):
-        self.sets[key] = value
+        self.sets[key] = np.array(value)
 
     def plot(self, figsize=(10, 3)):
         """Plots the fuzzy sets defined for the variable.
@@ -130,20 +132,55 @@ class FuzzyVariable:
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
 
-    def membership(self, value, fuzzyset):
+    def membership(self, value, fuzzyset, modifier=None, negation=False):
         """Computes the valor of the membership function on a specifyied point of the universe for the fuzzy set.
 
         Args:
             value (float): point to evaluate the value of the membership function.
             fuzzyset (string): name of the fuzzy set.
+            modifier (string): membership function modifier
+            negation (bool): returns the negation?
 
         Returns:
             A float number.
-        """  #
+        """
+
+        membership = self.sets[fuzzyset]
+        if modifier is not None:
+            if modifier.upper() == "VERY":
+                membership = membership ** 2
+            if modifier.upper() == "SOMEWHAT":
+                membership = membership ** 0.33333
+            if modifier.upper().replace("-", "_") == "MORE_OR_LESS":
+                membership = membership ** 0.5
+            if modifier.upper() == "EXTREMELY":
+                membership = membership ** 3
+            if modifier.upper() == "PLUS":
+                membership = membership ** 1.25
+            if modifier.upper() == "INTENSIFY":
+                membership = np.where(
+                    membership <= 0.5, membership ** 2, 1 - 2 * (1 - membership) ** 2
+                )
+            if modifier.upper() == "SLIGHTLY":
+                plus_membership = membership ** 1.25
+                not_very_membership = 1 - membership ** 2
+                membership = np.where(
+                    plus_membership < not_very_membership,
+                    plus_membership,
+                    not_very_membership,
+                )
+                membership = membership / np.max(membership)
+                membership = np.where(
+                    membership <= 0.5, membership ** 2, 1 - 2 * (1 - membership) ** 2
+                )
+
+        if negation is True:
+            membership = 1 - membership
+
         return np.interp(
             x=value,
             xp=self.universe,
-            fp=self.sets[fuzzyset],
+            fp=membership,
         )
 
     def aggregate(self, operator="max"):
