@@ -117,7 +117,7 @@ class FuzzyVariable:
 
         """
         # plt.gcf().clf()
-        plt.figure(figsize=figsize)
+        plt.figure(figsize=figsize, clear=True)
         for k in self.sets.keys():
             plt.plot(self.universe, self.sets[k], "o-", label=k)
         plt.legend()
@@ -127,8 +127,8 @@ class FuzzyVariable:
         plt.gca().spines["bottom"].set_color("gray")
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
-        plt.show()
-        plt.close("all")
+        # plt.show()
+        # plt.close("all")
 
     def membership(self, value, fuzzyset):
         """Computes the valor of the membership function on a specifyied point of the universe for the fuzzy set.
