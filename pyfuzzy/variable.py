@@ -118,8 +118,9 @@ class FuzzyVariable:
         """
         # plt.gcf().clf()
         plt.close("all")
-        plt.figure(figsize=figsize)
+        plt.clf()
         plt.cla()
+        plt.figure(figsize=figsize)
         for k in self.sets.keys():
             plt.plot(self.universe, self.sets[k], "o-", label=k)
         plt.legend()
