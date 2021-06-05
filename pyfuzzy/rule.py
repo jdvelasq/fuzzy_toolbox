@@ -107,7 +107,9 @@ class FuzzyRule:
                     )
                 return
 
-        self.combined_input = None
+            self.combined_input = None
+
+        self.combined_input = self.memberships
 
     def compute_implication(self, implication_operator):
 
