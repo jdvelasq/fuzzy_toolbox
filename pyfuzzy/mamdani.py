@@ -9,12 +9,14 @@ class Mamdani:
         self,
         rules,
         and_operator="min",
+        or_operator="max",
         implication_operator="min",
         aggregation_operator="max",
         defuzzification_operator="cog",
     ):
         self.rules = rules
         self.and_operator = and_operator
+        self.or_operator = or_operator
         self.implication_operator = implication_operator
         self.aggregation_operator = aggregation_operator
         self.defuzzification_operator = defuzzification_operator
