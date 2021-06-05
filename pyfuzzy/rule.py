@@ -93,7 +93,7 @@ class FuzzyRule:
 
         if len(self.memberships) > 1 and self.is_and is False:
 
-            if or_operator == "min":
+            if or_operator == "max":
                 self.combined_input = np.min(self.memberships)
                 return
 
@@ -107,7 +107,7 @@ class FuzzyRule:
                     )
                 return
 
-        self.combined_input = self.memberships
+        self.combined_input = None
 
     def compute_implication(self, implication_operator):
 
