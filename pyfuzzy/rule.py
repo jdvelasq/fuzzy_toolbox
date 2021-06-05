@@ -8,9 +8,11 @@ class FuzzyRule:
         self,
         antecedents,
         consequent,
+        is_and=True,
     ):
         self.antecedents = antecedents
         self.consequent = consequent
+        self.is_and = is_and
         self.memberships = None
         self.combined_input = None
         self.output = None
@@ -46,9 +48,11 @@ class FuzzyRule:
     def get_consequent_name(self):
         return self.consequent[0].name
 
-    def compute_inference(self, and_operator, implication_operator, **values):
+    def compute_inference(
+        self, and_operator, or_operator, implication_operator, **values
+    ):
         self.compute_memberships(**values)
-        self.combine_inputs(and_operator)
+        self.combine_inputs(and_operator, or_operator)
         self.compute_implication(implication_operator)
 
     def compute_memberships(self, **values):
@@ -77,16 +81,33 @@ class FuzzyRule:
             membership = fuzzyvar.membership(crisp_value, fuzzyset, modifier, negation)
             self.memberships.append(membership)
 
-    def combine_inputs(self, and_operator):
+    def combine_inputs(self, and_operator, or_operator):
 
-        if len(self.memberships) > 1:
+        if len(self.memberships) > 1 and self.is_and is True:
             operator = {
                 "min": np.min,
                 "prod": np.prod,
             }[and_operator]
             self.combined_input = operator(self.memberships)
-        else:
-            self.combined_input = self.memberships
+            return
+
+        if len(self.memberships) > 1 and self.is_and is False:
+
+            if or_operator == "min":
+                self.combined_input = np.min(self.memberships)
+                return
+
+            if or_operator == "probor":
+                self.combined_input = self.memberships[0]
+                for i in range(1, len(self.memberships)):
+                    self.combined_input = (
+                        self.combined_input
+                        + self.memberships[i]
+                        - self.combined_input * self.memberships[i]
+                    )
+                return
+
+        self.combined_input = self.memberships
 
     def compute_implication(self, implication_operator):
 
