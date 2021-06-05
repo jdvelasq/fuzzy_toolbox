@@ -95,7 +95,7 @@ class FuzzyVariable:
     """
 
     def __init__(self, name, universe, sets=None):
-        self.name = name
+        self.name = name.replace(" ", "_")
         self.universe = universe
         if sets is None:
             self.sets = {}
