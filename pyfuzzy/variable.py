@@ -117,7 +117,7 @@ class FuzzyVariable:
 
         """
         # plt.gcf().clf()
-        plt.close()
+        plt.close("all")
         plt.figure(figsize=figsize)
         plt.cla()
         for k in self.sets.keys():
