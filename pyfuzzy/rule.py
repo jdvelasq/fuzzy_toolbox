@@ -41,7 +41,7 @@ class FuzzyRule:
         return self.consequent[0].universe
 
     def get_consequent_membership(self):
-        return self.consequent[0].sets[self.consequent[1]]
+        return self.consequent[0].sets[self.consequent[-1]]
 
     def get_consequent_name(self):
         return self.consequent[0].name
