@@ -132,18 +132,7 @@ class FuzzyVariable:
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
 
-    def membership(self, value, fuzzyset, modifier=None, negation=False):
-        """Computes the valor of the membership function on a specifyied point of the universe for the fuzzy set.
-
-        Args:
-            value (float): point to evaluate the value of the membership function.
-            fuzzyset (string): name of the fuzzy set.
-            modifier (string): membership function modifier
-            negation (bool): returns the negation?
-
-        Returns:
-            A float number.
-        """
+    def get_modified_membership(self, fuzzyset, modifier, negation):
 
         membership = self.sets[fuzzyset]
         if modifier is not None:
@@ -176,6 +165,23 @@ class FuzzyVariable:
 
         if negation is True:
             membership = 1 - membership
+
+        return membership
+
+    def membership(self, value, fuzzyset, modifier=None, negation=False):
+        """Computes the valor of the membership function on a specifyied point of the universe for the fuzzy set.
+
+        Args:
+            value (float): point to evaluate the value of the membership function.
+            fuzzyset (string): name of the fuzzy set.
+            modifier (string): membership function modifier
+            negation (bool): returns the negation?
+
+        Returns:
+            A float number.
+        """
+
+        membership = self.get_modified_membership(fuzzyset, modifier, negation)
 
         return np.interp(
             x=value,

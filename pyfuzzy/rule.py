@@ -90,7 +90,26 @@ class FuzzyRule:
 
     def compute_implication(self, implication_operator):
 
-        membership = np.array(self.get_consequent_membership())
+        if len(self.consequent) == 2:
+            modifier = None
+            negation = False
+
+        if len(self.consequent) == 3:
+            modifier = self.consequent[1]
+            if modifier.upper() == "NOT":
+                modifier = None
+                negation = True
+            else:
+                negation = False
+
+        if len(self.consequent) == 4:
+            modifier = self.consequent[2]
+            negation = True
+
+        fuzzyset = self.consequent[-1]
+        membership = self.consequent[0].get_modified_membership(
+            fuzzyset, modifier, negation
+        )
 
         if implication_operator == "min":
             membership = np.where(
@@ -101,6 +120,8 @@ class FuzzyRule:
 
         if implication_operator == "prod":
             membership = np.array(self.combined_input) * membership
+
+        membership = np.array(membership)
 
         self.output = FuzzyVariable(
             name="Implication",
