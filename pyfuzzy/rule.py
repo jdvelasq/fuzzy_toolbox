@@ -28,7 +28,10 @@ class FuzzyRule:
                     text += " " + antecedent[k]
                 text += "\n"
             else:
-                text += space + "AND " + antecedent[0].name + " IS"
+                if self.is_and is True:
+                    text += space + "AND " + antecedent[0].name + " IS"
+                else:
+                    text += space + "OR " + antecedent[0].name + " IS"
                 for k in range(1, len(antecedent)):
                     text += " " + antecedent[k]
                 text += "\n"
