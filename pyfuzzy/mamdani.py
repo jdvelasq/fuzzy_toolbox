@@ -39,6 +39,7 @@ class Mamdani:
         for rule in self.rules:
             rule.compute_inference(
                 and_operator=self.and_operator,
+                or_operator=self.or_operator,
                 implication_operator=self.implication_operator,
                 **self.values
             )
