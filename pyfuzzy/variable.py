@@ -94,10 +94,13 @@ class FuzzyVariable:
 
     """
 
-    def __init__(self, name, universe, sets={}):
+    def __init__(self, name, universe, sets=None):
         self.name = name
         self.universe = universe
-        self.sets = sets
+        if sets is None:
+            self.sets = {}
+        else:
+            self.sets = sets
 
     def __getitem__(self, key):
         return self.sets[key]
