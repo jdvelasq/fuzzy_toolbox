@@ -16,6 +16,7 @@ setup(
     install_requires=[
         "numpy",
         "matplotlib",
+        "progressbar2",
     ],
     packages=[
         "pyfuzzy",

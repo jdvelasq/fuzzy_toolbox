@@ -1,4 +1,6 @@
 import numpy as np
+import progressbar
+import logging
 
 
 class Sugeno:
@@ -14,90 +16,73 @@ class Sugeno:
         self.antecedents = None
         self.rule_output = None
 
-    def __call__(self, X):
+    def compute_memberships_by_rule(self, X):
 
-        # computa la pertenencia por cada componente del antecedente
-        # de cada regla
-        self.compute_memberships(X)
-        self.reduce_memberships()
-        self.compute_consequents(X)
-        self.computed_weighted_output()
-        return self.output
+        NPOINTS = len(X)
+        NRULES = len(self.rules)
+        NDIM = len(self.rules[0])
 
-    def computed_weighted_output(self):
+        fuzzy_index = np.tile(self.rules, (NPOINTS, 1))
 
-        sum_of_memberships = np.sum(self.reduced_memberships, axis=1)
+        data = np.repeat(X, NRULES, axis=0)
+        rule_memberships = np.zeros(shape=(NPOINTS * NRULES, NDIM))
 
-        for i_row in range(len(self.reduced_memberships)):
-            self.reduced_memberships[i_row, :] /= sum_of_memberships[i_row]
+        for i_dim in range(NDIM):
 
-        self.output = self.rule_output * self.reduced_memberships
-        self.output = self.output.sum(axis=1)
+            fuzzy_sets = self.fuzzy_sets[i_dim]
+            fuzzy_sets = fuzzy_sets[fuzzy_index[:, i_dim]]
 
-    def compute_consequents(self, X):
-
-        self.rule_output = np.zeros(shape=(len(X), len(self.rules)))
-        for i_row, xi in enumerate(X):
-            self.rule_output[i_row, :] = np.matmul(self.coefs_, xi) + self.intercept_
-
-    def reduce_memberships(self):
-
-        self.reduced_memberships = np.zeros(
-            shape=(len(self.antecedents), len(self.rules))
-        )
-        for i_row in range(len(self.antecedents)):
-            for i_rule in range(len(self.rules)):
-                self.reduced_memberships[i_row, i_rule] = np.min(
-                    self.antecedents[i_row, i_rule, :]
-                )
-
-    def compute_memberships(self, X):
-        def compute_membership_per_set(var, fuzzy_sets):
-
+            x = data[:, i_dim]
             a = fuzzy_sets[:, 0]
             b = fuzzy_sets[:, 1]
             c = fuzzy_sets[:, 2]
 
-            return np.where(
-                var <= a,
-                0,
-                np.where(
-                    var <= b,
-                    (var - a) / (b - a),
-                    np.where(var <= c, (c - var) / (c - b), 0),
-                ),
-            )
+            membership = np.maximum(0, np.minimum((x - a) / (b - a), (c - x) / (c - b)))
+            rule_memberships[:, i_dim] = membership
 
-        self.antecedents = np.zeros(shape=(len(X), len(self.rules), len(self.rules[0])))
+        rule_memberships = rule_memberships.min(axis=1)
+        self.rule_memberships = rule_memberships.reshape((NPOINTS, NRULES))
 
-        for i in range(self.antecedents.shape[0]):
-            self.antecedents[i, :, :] = np.array(self.rules)
+    def compute_consequents(self, X):
 
-        for i_row, x_row in enumerate(X):
+        NRULES = len(self.rules)
+        NPOINTS = len(X)
 
-            for i_var, var in enumerate(x_row):
-                fuzzy_sets = self.fuzzy_sets[i_var]
-                m = compute_membership_per_set(var, fuzzy_sets)
+        output = np.matmul(X, np.transpose(self.coefs_))
+        intercepts = self.intercept_.reshape((1, NRULES))
+        intercepts = np.tile(intercepts, (NPOINTS, 1))
+        self.consequents = output + intercepts
 
-                for i_rule in range(len(self.rules)):
-                    i_set = self.antecedents[i_row, i_rule, i_var]
-                    self.antecedents[i_row, i_rule, i_var] = m[int(i_set)]
+    def compute_weighted_output(self):
 
-    def fit(self, X, y):
+        NRULES = len(self.rules)
+        NPOINTS = len(X)
+
+        sum_of_memberships = self.rule_memberships.sum(axis=1).reshape((NPOINTS, 1))
+        sum_of_memberships = np.tile(sum_of_memberships, (1, NRULES))
+        rule_memberships = self.rule_memberships / sum_of_memberships
+        output = rule_memberships * self.consequents
+        return output.sum(axis=1).reshape(-1)
+
+    def __call__(self, X):
+
+        self.compute_memberships_by_rule(X)
+        self.compute_consequents(X)
+        return self.compute_weighted_output()
+
+    def fit(self, X, y, learning_rate=0.01, max_iter=10):
 
         self.create_structure(X)
 
-        # self.improve_fuzzysets(X, y)
+        for _ in progressbar.progressbar(range(max_iter)):
 
-        for _ in range(100):
+            self.improve_fuzzysets(X, y, learning_rate)
+            self.improve_coefs(X, y, learning_rate)
+            self.improve_intercepts(X, y, learning_rate)
 
-            self.improve_fuzzysets(X, y)
-            self.improve_coefs(X, y)
-            self.improve_intercepts(X, y)
+        print("Final MSE = {:5.3f}".format(np.mean((y - self.__call__(X)) ** 2)))
 
-            print(np.mean((y - self.__call__(X)) ** 2))
-
-    def improve_fuzzysets(self, X, y):
+    def improve_fuzzysets(self, X, y, learning_rate):
 
         y_pred = self.__call__(X)
         mse_base = np.mean((y - y_pred) ** 2)
@@ -117,9 +102,9 @@ class Sugeno:
 
                     self.fuzzy_sets[i_var][i_set, i_comp] -= 0.001
 
-            self.fuzzy_sets[i_var] = self.fuzzy_sets[i_var] - 0.001 * grad
+            self.fuzzy_sets[i_var] = self.fuzzy_sets[i_var] - learning_rate * grad
 
-    def improve_intercepts(self, X, y):
+    def improve_intercepts(self, X, y, learning_rate):
 
         y_pred = self.__call__(X)
         mse_base = np.mean((y - y_pred) ** 2)
@@ -134,9 +119,9 @@ class Sugeno:
             grad[i_row] = (mse_current - mse_base) / 0.001
             self.intercept_[i_row] -= 0.001
 
-        self.intercept_ = self.intercept_ - 0.001 * grad
+        self.intercept_ = self.intercept_ - learning_rate * grad
 
-    def improve_coefs(self, X, y):
+    def improve_coefs(self, X, y, learning_rate):
 
         y_pred = self.__call__(X)
         mse_base = np.mean((y - y_pred) ** 2)
@@ -155,7 +140,7 @@ class Sugeno:
 
                 self.coefs_[i_row, i_col] -= 0.001
 
-        self.coefs_ = self.coefs_ - 0.001 * grad
+        self.coefs_ = self.coefs_ - learning_rate * grad
 
     def create_structure(self, X):
 
@@ -203,7 +188,6 @@ class Sugeno:
 
             antecedents.append(matrix)
 
-        # self.fuzzy_sets = np.array(antecedents, dtype=np.int0)
         self.fuzzy_sets = antecedents
 
     def create_consequents(self):
@@ -221,13 +205,15 @@ y2 = y1 / np.exp(x1)
 import matplotlib.pyplot as plt
 import pandas as pd
 
+
 X = pd.DataFrame({"x1": x1, "x2": x2})
 
 m = Sugeno(num_input_mfs=(3, 4))
+m.fit(X.values, y2, learning_rate=0.01, max_iter=500)
+np.mean((y2 - m(X.values)) ** 2)
 
-m.fit(X.values, y2)
+# m(X.values)
 
 y_pred = m(X.values)
-
 plt.plot(y2, "-k")
 plt.plot(y_pred, "-r")
