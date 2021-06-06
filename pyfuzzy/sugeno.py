@@ -100,7 +100,7 @@ class Sugeno:
 
     def fit(self, X_antecedents, X_consequents, y, learning_rate=0.01, max_iter=10):
 
-        self.create_structure(X_antecedents, X_consequents)
+        self.create_structure(X_antecedents, X_consequents, y)
 
         for _ in progressbar.progressbar(range(max_iter)):
 
@@ -174,11 +174,21 @@ class Sugeno:
 
         self.coefs_ = self.coefs_ - learning_rate * grad
 
-    def create_structure(self, X_antecedents, X_consequents):
+    def create_structure(self, X_antecedents, X_consequents, y):
 
         self.create_rules()
         self.create_antecedents(X_antecedents)
         self.create_consequents(X_consequents)
+
+        from sklearn.linear_model import LinearRegression
+
+        NRULES = len(self.rules)
+
+        m = LinearRegression()
+        m.fit(X_consequents, y)
+        self.coefs_ = m.coef_.reshape((1, len(m.coef_)))
+        self.coefs_ = np.tile(self.coefs_, (NRULES, 1))
+        self.intercept_ = np.array([m.intercept_] * NRULES)
 
     def create_rules(self):
         def connect(sets):
@@ -229,22 +239,22 @@ class Sugeno:
         self.intercept_ = self.rng.normal(loc=0, scale=0.1, size=n_rules)
 
 
-x1 = np.linspace(start=0, stop=10, num=100)
-x2 = np.random.uniform(0, 10, 100)
-y1 = np.sin(x1) + np.cos(x1)
-y2 = (y1) / np.exp(x1)
+# x1 = np.linspace(start=0, stop=10, num=100)
+# x2 = np.random.uniform(0, 10, 100)
+# y1 = np.sin(x1) + np.cos(x1)
+# y2 = (y1) / np.exp(x1)
 
-import matplotlib.pyplot as plt
-import pandas as pd
+# import matplotlib.pyplot as plt
+# import pandas as pd
 
 
-X = pd.DataFrame({"x1": x1, "x2": x2})
-# X = pd.DataFrame({"x1": x1})
+# X = pd.DataFrame({"x1": x1, "x2": x2})
+# # X = pd.DataFrame({"x1": x1})
 
-m = Sugeno(num_input_mfs=(3, 3))
+# m = Sugeno(num_input_mfs=(3, 3))
 
-m.fit(X.values, X.values, y2, learning_rate=0.01, max_iter=50)
-np.mean((y2 - m(X.values, X.values)) ** 2)
+# m.fit(X.values, X.values, y2, learning_rate=0.01, max_iter=50)
+# np.mean((y2 - m(X.values, X.values)) ** 2)
 
 # m(X.values)
 
