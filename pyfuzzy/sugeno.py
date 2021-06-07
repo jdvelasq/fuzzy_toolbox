@@ -114,7 +114,8 @@ class Sugeno:
                 np.mean((y - self.__call__(X_antecedents, X_consequents)) ** 2)
             )
 
-        print("Final MSE = {:5.3f}".format(history["loss"][-1]))
+        # print("Final MSE = {:5.3f}".format(history["loss"][-1]))
+        return history
 
     def improve_fuzzysets(self, X_antecedents, X_consequents, y, learning_rate):
 
