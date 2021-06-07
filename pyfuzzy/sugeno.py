@@ -255,14 +255,15 @@ class Sugeno:
         x_max = self.x_max[i_var]
         x = np.linspace(start=x_min, stop=x_max, num=100)
 
+        fuzzy_sets = self.fuzzy_sets[i_var]
+
         for k in range(n_sets):
 
-            fuzzy_sets = self.fuzzy_sets[k]
-            fuzzy_sets = fuzzy_sets[k]
+            fuzzy_set = fuzzy_sets[k]
 
-            a = fuzzy_sets[:, 0]
-            b = fuzzy_sets[:, 1]
-            c = fuzzy_sets[:, 2]
+            a = fuzzy_set[0]
+            b = fuzzy_set[1]
+            c = fuzzy_set[2]
 
             membership = np.maximum(0, np.minimum((x - a) / (b - a), (c - x) / (c - b)))
             plt.plot(x, membership)
