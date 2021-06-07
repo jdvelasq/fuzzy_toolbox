@@ -242,20 +242,20 @@ class Sugeno:
         self.intercept_ = self.rng.normal(loc=0, scale=0.1, size=n_rules)
 
 
-x1 = np.linspace(start=0, stop=10, num=100)
-x2 = np.random.uniform(0, 10, 100)
-y1 = np.sin(x1) + np.cos(x1)
-y2 = (y1) / np.exp(x1)
+# x1 = np.linspace(start=0, stop=10, num=100)
+# x2 = np.random.uniform(0, 10, 100)
+# y1 = np.sin(x1) + np.cos(x1)
+# y2 = (y1) / np.exp(x1)
 
-import matplotlib.pyplot as plt
-import pandas as pd
+# import matplotlib.pyplot as plt
+# import pandas as pd
 
 
-X = pd.DataFrame({"x1": x1, "x2": x2})
+# X = pd.DataFrame({"x1": x1, "x2": x2})
 
-m = Sugeno(num_input_mfs=(3, 3))
+# m = Sugeno(num_input_mfs=(3, 3))
 
-m.fit(X.values, X.values, y2, learning_rate=0.01, max_iter=10)
+# m.fit(X.values, X.values, y2, learning_rate=0.01, max_iter=10)
 # np.mean((y2 - m(X.values, X.values)) ** 2)
 
 # m(X.values)
