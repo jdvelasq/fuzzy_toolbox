@@ -106,17 +106,18 @@ class Sugeno:
 
         history = {"loss": []}
 
-        for _ in progressbar.progressbar(range(max_iter)):
+        if max_iter > 0:
 
-            self.improve_fuzzysets(X_antecedents, X_consequents, y, learning_rate)
-            self.improve_coefs(X_antecedents, X_consequents, y, learning_rate)
-            self.improve_intercepts(X_antecedents, X_consequents, y, learning_rate)
+            for _ in progressbar.progressbar(range(max_iter)):
 
-            history["loss"].append(
-                np.mean((y - self.__call__(X_antecedents, X_consequents)) ** 2)
-            )
+                self.improve_fuzzysets(X_antecedents, X_consequents, y, learning_rate)
+                self.improve_coefs(X_antecedents, X_consequents, y, learning_rate)
+                self.improve_intercepts(X_antecedents, X_consequents, y, learning_rate)
 
-        # print("Final MSE = {:5.3f}".format(history["loss"][-1]))
+                history["loss"].append(
+                    np.mean((y - self.__call__(X_antecedents, X_consequents)) ** 2)
+                )
+
         return history
 
     def improve_fuzzysets(self, X_antecedents, X_consequents, y, learning_rate):
