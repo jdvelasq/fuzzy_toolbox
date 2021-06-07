@@ -253,7 +253,7 @@ class Sugeno:
         n_sets = self.num_input_mfs[i_var]
         x_min = self.x_min[i_var]
         x_max = self.x_max[i_var]
-        x = np.linspace(star=x_min, stop=x_max, num=100)
+        x = np.linspace(start=x_min, stop=x_max, num=100)
 
         for k in range(n_sets):
 
