@@ -1,6 +1,8 @@
+import logging
+
+import matplotlib.pyplot as plt
 import numpy as np
 import progressbar
-import logging
 
 
 class Sugeno:
@@ -212,6 +214,9 @@ class Sugeno:
         x_min = X_antecedents.min(axis=0)
         x_max = X_antecedents.max(axis=0)
 
+        self.x_min = x_min
+        self.x_max = x_max
+
         antecedents = []
         for i_var in range(len(x_min)):
 
@@ -240,6 +245,33 @@ class Sugeno:
         n_rules = np.prod(self.num_input_mfs)
         self.coefs_ = self.rng.normal(loc=0, scale=0.1, size=(n_rules, n_vars))
         self.intercept_ = self.rng.normal(loc=0, scale=0.1, size=n_rules)
+
+    def plot_fuzzysets(self, i_var, figsize=(8, 3)):
+
+        plt.figure(figsize=figsize)
+
+        n_sets = self.num_input_mfs[i_var]
+        x_min = self.x_min[i_var]
+        x_max = self.x_max[i_var]
+        x = np.linspace(star=x_min, stop=x_max, num=100)
+
+        for k in range(n_sets):
+
+            fuzzy_sets = self.fuzzy_sets[k]
+            fuzzy_sets = fuzzy_sets[k]
+
+            a = fuzzy_sets[:, 0]
+            b = fuzzy_sets[:, 1]
+            c = fuzzy_sets[:, 2]
+
+            membership = np.maximum(0, np.minimum((x - a) / (b - a), (c - x) / (c - b)))
+            plt.plot(x, membership)
+
+        plt.ylim(-0.05, 1.05)
+        plt.gca().spines["left"].set_color("lightgray")
+        plt.gca().spines["bottom"].set_color("gray")
+        plt.gca().spines["top"].set_visible(False)
+        plt.gca().spines["right"].set_visible(False)
 
 
 # x1 = np.linspace(start=0, stop=10, num=100)
