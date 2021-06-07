@@ -102,17 +102,19 @@ class Sugeno:
 
         self.create_structure(X_antecedents, X_consequents, y)
 
+        history = {"loss": []}
+
         for _ in progressbar.progressbar(range(max_iter)):
 
             self.improve_fuzzysets(X_antecedents, X_consequents, y, learning_rate)
             self.improve_coefs(X_antecedents, X_consequents, y, learning_rate)
             self.improve_intercepts(X_antecedents, X_consequents, y, learning_rate)
 
-        print(
-            "Final MSE = {:5.3f}".format(
+            history["loss"].append(
                 np.mean((y - self.__call__(X_antecedents, X_consequents)) ** 2)
             )
-        )
+
+        print("Final MSE = {:5.3f}".format(history["loss"][-1]))
 
     def improve_fuzzysets(self, X_antecedents, X_consequents, y, learning_rate):
 
@@ -239,21 +241,20 @@ class Sugeno:
         self.intercept_ = self.rng.normal(loc=0, scale=0.1, size=n_rules)
 
 
-# x1 = np.linspace(start=0, stop=10, num=100)
-# x2 = np.random.uniform(0, 10, 100)
-# y1 = np.sin(x1) + np.cos(x1)
-# y2 = (y1) / np.exp(x1)
+x1 = np.linspace(start=0, stop=10, num=100)
+x2 = np.random.uniform(0, 10, 100)
+y1 = np.sin(x1) + np.cos(x1)
+y2 = (y1) / np.exp(x1)
 
-# import matplotlib.pyplot as plt
-# import pandas as pd
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
-# X = pd.DataFrame({"x1": x1, "x2": x2})
-# # X = pd.DataFrame({"x1": x1})
+X = pd.DataFrame({"x1": x1, "x2": x2})
 
-# m = Sugeno(num_input_mfs=(3, 3))
+m = Sugeno(num_input_mfs=(3, 3))
 
-# m.fit(X.values, X.values, y2, learning_rate=0.01, max_iter=50)
+m.fit(X.values, X.values, y2, learning_rate=0.01, max_iter=10)
 # np.mean((y2 - m(X.values, X.values)) ** 2)
 
 # m(X.values)
