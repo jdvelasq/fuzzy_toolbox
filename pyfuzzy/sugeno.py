@@ -202,6 +202,8 @@ class Sugeno:
 
                 self.fuzzy_set_centers[i_var][i_comp] -= 0.001
 
+            grad = grad / np.linalg.norm(grad)
+
             self.fuzzy_set_centers[i_var] = (
                 self.fuzzy_set_centers[i_var] - learning_rate * grad
             )
@@ -227,6 +229,8 @@ class Sugeno:
                 grad[i_comp] = (mse_current - mse_base) / 0.001
 
                 self.fuzzy_set_sigmas[i_var][i_comp] -= 0.001
+
+            grad = grad / np.linalg.norm(grad)
 
             self.fuzzy_set_sigmas[i_var] = (
                 self.fuzzy_set_sigmas[i_var] - learning_rate * grad
@@ -256,6 +260,8 @@ class Sugeno:
 
                 self.fuzzy_set_exponents[i_var][i_comp] -= 0.001
 
+            grad = grad / np.linalg.norm(grad)
+
             self.fuzzy_set_exponents[i_var] = (
                 self.fuzzy_set_exponents[i_var] - learning_rate * grad
             )
@@ -274,6 +280,8 @@ class Sugeno:
             mse_current = np.mean((y - y_pred) ** 2)
             grad[i_row] = (mse_current - mse_base) / 0.001
             self.intercept_[i_row] -= 0.001
+
+        grad = grad / np.linalg.norm(grad)
 
         self.intercept_ = self.intercept_ - learning_rate * grad
 
@@ -295,6 +303,8 @@ class Sugeno:
                 grad[i_row, i_col] = (mse_current - mse_base) / 0.001
 
                 self.coefs_[i_row, i_col] -= 0.001
+
+        grad = grad / np.linalg.norm(grad)
 
         self.coefs_ = self.coefs_ - learning_rate * grad
 
