@@ -89,8 +89,8 @@ class Sugeno:
                 membership = 1 / (
                     1
                     + np.power(
-                        (x - fuzzy_set_centers) / fuzzy_set_sigmas,
-                        np.abs(2 * fuzzy_set_exponents),
+                        ((x - fuzzy_set_centers) / fuzzy_set_sigmas) ** 2,
+                        fuzzy_set_exponents,
                     )
                 )
 
