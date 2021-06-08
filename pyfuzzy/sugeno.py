@@ -430,7 +430,7 @@ class Sugeno:
             c = fuzzy_set_centers[i_fuzzy_set]
             s = fuzzy_set_sigmas[i_fuzzy_set]
             e = fuzzy_set_exponents[i_fuzzy_set]
-            membership = 1 / (1 + np.power((x - c) / s, np.abs(2 * e)))
+            membership = 1 / (1 + np.power(((x - c) / s) ** 2, e))
             plt.plot(x, membership)
 
     def plot_fuzzysets_trimf(self, i_var, figsize=(8, 3)):
