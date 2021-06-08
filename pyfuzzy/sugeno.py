@@ -165,6 +165,8 @@ class Sugeno:
 
         if max_iter > 0:
 
+            factor = np.power(1e-5 / learning_rate, 1.0 / max_iter)
+
             for _ in progressbar.progressbar(range(max_iter)):
 
                 self.improve_fuzzysets(X_antecedents, X_consequents, y, learning_rate)
@@ -174,6 +176,8 @@ class Sugeno:
                 history["loss"].append(
                     np.mean((y - self.__call__(X_antecedents, X_consequents)) ** 2)
                 )
+
+                learning_rate = learning_rate * factor
 
         return history
 
