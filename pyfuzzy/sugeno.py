@@ -61,7 +61,6 @@ class Sugeno:
 
             if self.mftype == "gaussmf":
                 fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_dim]
-                print(fuzzy_set_sigmas)
                 fuzzy_set_sigmas = fuzzy_set_sigmas[fuzzy_index[:, i_dim]]
 
                 x = data[:, i_dim]
@@ -358,11 +357,11 @@ class Sugeno:
                 )
 
             if self.mftype == "gaussmf":
-                self.fuzzy_set_sigmas.append([delta_x / 2.0] * n_sets)
+                self.fuzzy_set_sigmas.append(np.array([delta_x / 2.0] * n_sets))
 
             if self.mftype == "gbellmf":
-                self.fuzzy_set_sigmas.append([delta_x / 2.0] * n_sets)
-                self.fuzzy_set_exponents.append([1] * n_sets)
+                self.fuzzy_set_sigmas.append(np.array([delta_x / 2.0] * n_sets))
+                self.fuzzy_set_exponents.append(np.array([1] * n_sets))
 
     def create_consequents(self, X_consequents):
         n_vars = X_consequents.shape[1]
