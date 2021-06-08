@@ -86,9 +86,10 @@ class Sugeno:
 
                 x = data[:, i_dim]
 
-                membership = 1 / np.power(
-                    1 + ((x - fuzzy_set_centers) / fuzzy_set_sigmas) ** 2,
-                    fuzzy_set_exponents,
+                membership = 1 / (
+                    1
+                    + ((x - fuzzy_set_centers) / fuzzy_set_sigmas)
+                    ** (2 * fuzzy_set_exponents),
                 )
 
             rule_memberships[:, i_dim] = membership
