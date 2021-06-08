@@ -363,9 +363,9 @@ class Sugeno:
 
         if self.mftype == "trimf":
             return self.plot_fuzzysets_trimf(i_var=i_var, figsize=figsize)
-        if self.mftyepe == "gaussmf":
+        if self.mftype == "gaussmf":
             return self.plot_fuzzysets_gaussmf(i_var=i_var, figsize=figsize)
-        if self.mftyepe == "gbellmf":
+        if self.mftype == "gbellmf":
             return self.plot_fuzzysets_gbellmf(i_var=i_var, figsize=figsize)
 
         plt.ylim(-0.05, 1.05)
