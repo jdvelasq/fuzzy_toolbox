@@ -61,7 +61,7 @@ class Sugeno:
 
             if self.mftype == "gaussmf":
                 fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_dim]
-                fuzzy_sets_sigmas = fuzzy_set_sigmas[fuzzy_index[:, i_dim]]
+                fuzzy_set_sigmas = fuzzy_set_sigmas[fuzzy_index[:, i_dim]]
 
                 x = data[:, i_dim]
 
