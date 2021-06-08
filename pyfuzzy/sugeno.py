@@ -90,7 +90,7 @@ class Sugeno:
                     1
                     + np.power(
                         (x - fuzzy_set_centers) / fuzzy_set_sigmas,
-                        2 * fuzzy_set_exponents,
+                        np.abs(2 * fuzzy_set_exponents),
                     )
                 )
 
