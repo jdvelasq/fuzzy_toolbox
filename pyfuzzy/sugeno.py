@@ -266,9 +266,11 @@ class Sugeno:
             fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_params[i_fuzzy_set + 1]
             fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_params[i_fuzzy_set + 2]
 
-            a = fuzzy_sets[0]
-            b = fuzzy_sets[1]
-            c = fuzzy_sets[2]
+        for i_fuzzy_set in range(n_sets):
+
+            a = fuzzy_sets[i_fuzzy_set, 0]
+            b = fuzzy_sets[i_fuzzy_set, 1]
+            c = fuzzy_sets[i_fuzzy_set, 2]
 
             membership = np.maximum(0, np.minimum((x - a) / (b - a), (c - x) / (c - b)))
             plt.plot(x, membership)
