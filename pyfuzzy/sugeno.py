@@ -244,9 +244,9 @@ class Sugeno:
 
         for i_var in range(len(self.num_input_mfs)):
 
-            grad = np.zeros(shape=self.fuzzy_set_sigmas[i_var].shape)
+            grad = np.zeros(shape=self.fuzzy_set_exponents[i_var].shape)
 
-            for i_comp in range(len(self.fuzzy_set_centers[i_var])):
+            for i_comp in range(len(self.fuzzy_set_exponents[i_var])):
 
                 self.fuzzy_set_exponents[i_var][i_comp] += 0.001
 
@@ -371,7 +371,7 @@ class Sugeno:
 
             if self.mftype == "gbellmf":
                 self.fuzzy_set_sigmas.append(np.array([delta_x / 2.0] * n_sets))
-                self.fuzzy_set_exponents.append(np.array([1] * n_sets))
+                self.fuzzy_set_exponents.append(np.array([1.0] * n_sets))
 
     def create_consequents(self, X_consequents):
         n_vars = X_consequents.shape[1]
@@ -429,7 +429,7 @@ class Sugeno:
             c = fuzzy_set_centers[i_fuzzy_set]
             s = fuzzy_set_sigmas[i_fuzzy_set]
             e = fuzzy_set_exponents[i_fuzzy_set]
-            membership = 1 / (1 + ((x - c) / s) ** (2 * e))
+            membership = 1 / (1 + np.power((x - c) / s), np.abs(2 * e))
             plt.plot(x, membership)
 
     def plot_fuzzysets_trimf(self, i_var, figsize=(8, 3)):
