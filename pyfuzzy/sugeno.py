@@ -37,11 +37,11 @@ class Sugeno:
         for i_dim in range(NDIM):
 
             n_sets = self.num_input_mfs[i_dim]
-            fuzzy_set_centers = self.fuzzy_set_centers[i_dim]
 
             if self.mftype == "trimf":
 
                 fuzzy_sets = np.zeros(shape=(n_sets, 3))
+                fuzzy_set_centers = self.fuzzy_set_centers[i_dim]
 
                 for i_fuzzy_set in range(n_sets):
                     fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_centers[i_fuzzy_set]
@@ -60,6 +60,10 @@ class Sugeno:
                 )
 
             if self.mftype == "gaussmf":
+
+                fuzzy_set_centers = self.fuzzy_set_centers[i_dim]
+                fuzzy_set_centers = fuzzy_set_centers[fuzzy_index[:, i_dim]]
+
                 fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_dim]
                 fuzzy_set_sigmas = fuzzy_set_sigmas[fuzzy_index[:, i_dim]]
 
@@ -71,11 +75,14 @@ class Sugeno:
 
             if self.mftype == "gbellmf":
 
+                fuzzy_set_centers = self.fuzzy_set_centers[i_dim]
+                fuzzy_set_centers = fuzzy_set_centers[fuzzy_index[:, i_dim]]
+
                 fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_dim]
-                fuzzy_sets_sigmas = fuzzy_set_sigmas[fuzzy_index[:, i_dim]]
+                fuzzy_set_sigmas = fuzzy_set_sigmas[fuzzy_index[:, i_dim]]
 
                 fuzzy_set_exponents = self.fuzzy_set_exponents[i_dim]
-                fuzzy_sets_exponents = fuzzy_set_exponents[fuzzy_index[:, i_dim]]
+                fuzzy_set_exponents = fuzzy_set_exponents[fuzzy_index[:, i_dim]]
 
                 x = data[:, i_dim]
 
