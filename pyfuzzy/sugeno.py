@@ -338,13 +338,23 @@ class Sugeno:
             n_sets = self.num_input_mfs[i_var]
             delta_x = (x_max[i_var] - x_min[i_var]) / (n_sets - 1)
 
-            self.fuzzy_set_centers.append(
-                np.linspace(
-                    start=x_min[i_var] - delta_x,
-                    stop=x_max[i_var] + delta_x,
-                    num=n_sets + 2,
+            if self.mftype == "trimf":
+
+                self.fuzzy_set_centers.append(
+                    np.linspace(
+                        start=x_min[i_var] - delta_x,
+                        stop=x_max[i_var] + delta_x,
+                        num=n_sets + 2,
+                    )
                 )
-            )
+            else:
+                self.fuzzy_set_centers.append(
+                    np.linspace(
+                        start=x_min[i_var],
+                        stop=x_max[i_var],
+                        num=n_sets,
+                    )
+                )
 
             if self.mftype == "gaussmf":
                 self.fuzzy_set_sigmas.append([delta_x] * n_sets)
