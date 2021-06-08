@@ -361,6 +361,59 @@ class Sugeno:
 
     def plot_fuzzysets(self, i_var, figsize=(8, 3)):
 
+        if self.mftype == "trimf":
+            return self.plot_fuzzysets_trimf(i_var=i_var, figsize=figsize)
+        if self.mftyepe == "gaussmf":
+            return self.plot_fuzzysets_gaussmf(i_var=i_var, figsize=figsize)
+        if self.mftyepe == "gbellmf":
+            return self.plot_fuzzysets_gbellmf(i_var=i_var, figsize=figsize)
+
+        plt.ylim(-0.05, 1.05)
+        plt.gca().spines["left"].set_color("lightgray")
+        plt.gca().spines["bottom"].set_color("gray")
+        plt.gca().spines["top"].set_visible(False)
+        plt.gca().spines["right"].set_visible(False)
+
+    def plot_fuzzysets_gaussmf(self, i_var, figsize=(8, 3)):
+
+        n_sets = self.num_input_mfs[i_var]
+        x_min = self.x_min[i_var]
+        x_max = self.x_max[i_var]
+        x = np.linspace(start=x_min, stop=x_max, num=100)
+
+        n_sets = self.num_input_mfs[i_var]
+        fuzzy_set_centers = self.fuzzy_set_centers[i_var]
+        fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_var]
+
+        plt.figure(figsize=figsize)
+        for i_fuzzy_set in range(n_sets):
+            c = fuzzy_set_centers[i_fuzzy_set]
+            s = fuzzy_set_sigmas[i_fuzzy_set]
+            membership = np.exp(-(((x - c) / s) ** 2))
+            plt.plot(x, membership)
+
+    def plot_fuzzysets_gbellmf(self, i_var, figsize=(8, 3)):
+
+        n_sets = self.num_input_mfs[i_var]
+        x_min = self.x_min[i_var]
+        x_max = self.x_max[i_var]
+        x = np.linspace(start=x_min, stop=x_max, num=100)
+
+        n_sets = self.num_input_mfs[i_var]
+        fuzzy_set_centers = self.fuzzy_set_centers[i_var]
+        fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_var]
+        fuzzy_set_exponents = self.fuzzy_set_exponents[i_var]
+
+        plt.figure(figsize=figsize)
+        for i_fuzzy_set in range(n_sets):
+            c = fuzzy_set_centers[i_fuzzy_set]
+            s = fuzzy_set_sigmas[i_fuzzy_set]
+            e = fuzzy_set_exponents[i_fuzzy_set]
+            membership = 1 / (1 + ((x - c) / 2) ** (2 * e))
+            plt.plot(x, membership)
+
+    def plot_fuzzysets_trimf(self, i_var, figsize=(8, 3)):
+
         plt.figure(figsize=figsize)
 
         n_sets = self.num_input_mfs[i_var]
@@ -386,12 +439,6 @@ class Sugeno:
 
             membership = np.maximum(0, np.minimum((x - a) / (b - a), (c - x) / (c - b)))
             plt.plot(x, membership)
-
-        plt.ylim(-0.05, 1.05)
-        plt.gca().spines["left"].set_color("lightgray")
-        plt.gca().spines["bottom"].set_color("gray")
-        plt.gca().spines["top"].set_visible(False)
-        plt.gca().spines["right"].set_visible(False)
 
 
 # x1 = np.linspace(start=0, stop=10, num=100)
