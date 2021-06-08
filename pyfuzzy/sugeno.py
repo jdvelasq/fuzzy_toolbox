@@ -4,9 +4,12 @@ import progressbar
 
 
 class Sugeno:
-    def __init__(self, num_input_mfs=(3,), mftype="trimf", seed=None):
+    def __init__(
+        self, num_input_mfs=(3,), mftype="trimf", and_operator="min", seed=None
+    ):
         self.num_input_mfs = num_input_mfs
         self.mftype = mftype
+        self.and_operator = and_operator
 
         if seed is None:
             self.rng = np.random.default_rng()
@@ -30,26 +33,40 @@ class Sugeno:
         for i_dim in range(NDIM):
 
             n_sets = self.num_input_mfs[i_dim]
-            fuzzy_set_params = self.fuzzy_set_params[i_dim]
+            fuzzy_set_params_centers = self.fuzzy_set_params_centers[i_dim]
 
-            fuzzy_sets = np.zeros(shape=(n_sets, 3))
+            if self.mftype == "trimf":
 
-            for i_fuzzy_set in range(n_sets):
-                fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_params[i_fuzzy_set]
-                fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_params[i_fuzzy_set + 1]
-                fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_params[i_fuzzy_set + 2]
+                fuzzy_sets = np.zeros(shape=(n_sets, 3))
 
-            fuzzy_sets = fuzzy_sets[fuzzy_index[:, i_dim]]
+                for i_fuzzy_set in range(n_sets):
+                    fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_params_centers[i_fuzzy_set]
+                    fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_params_centers[
+                        i_fuzzy_set + 1
+                    ]
+                    fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_params_centers[
+                        i_fuzzy_set + 2
+                    ]
 
-            a = fuzzy_sets[:, 0]
-            b = fuzzy_sets[:, 1]
-            c = fuzzy_sets[:, 2]
+                fuzzy_sets = fuzzy_sets[fuzzy_index[:, i_dim]]
 
-            x = data[:, i_dim]
-            membership = np.maximum(0, np.minimum((x - a) / (b - a), (c - x) / (c - b)))
+                a = fuzzy_sets[:, 0]
+                b = fuzzy_sets[:, 1]
+                c = fuzzy_sets[:, 2]
+
+                x = data[:, i_dim]
+                membership = np.maximum(
+                    0, np.minimum((x - a) / (b - a), (c - x) / (c - b))
+                )
+
+            # if self.mftype == "gaussmf":
+
             rule_memberships[:, i_dim] = membership
 
-        rule_memberships = rule_memberships.min(axis=1)
+        if self.and_operator == "min":
+            rule_memberships = rule_memberships.min(axis=1)
+        if self.and_operator == "prod":
+            rule_memberships = rule_memberships.prod(axis=1)
         rule_memberships = rule_memberships.reshape((NPOINTS, NRULES))
         sum_of_memberships = rule_memberships.sum(axis=1).reshape((NPOINTS, 1))
         sum_of_memberships = np.where(sum_of_memberships == 0, 1, sum_of_memberships)
@@ -226,14 +243,14 @@ class Sugeno:
         self.x_min = x_min
         self.x_max = x_max
 
-        self.fuzzy_set_params = []
+        self.fuzzy_set_params_center = []
 
         for i_var in range(len(x_min)):
 
             n_sets = self.num_input_mfs[i_var]
             delta_x = (x_max[i_var] - x_min[i_var]) / (n_sets - 1)
 
-            self.fuzzy_set_params.append(
+            self.fuzzy_set_params_center.append(
                 np.linspace(
                     start=x_min[i_var] - delta_x,
                     stop=x_max[i_var] + delta_x,
@@ -257,14 +274,14 @@ class Sugeno:
         x = np.linspace(start=x_min, stop=x_max, num=100)
 
         n_sets = self.num_input_mfs[i_var]
-        fuzzy_set_params = self.fuzzy_set_params[i_var]
+        fuzzy_set_params_centers = self.fuzzy_set_params_centers[i_var]
 
         fuzzy_sets = np.zeros(shape=(n_sets, 3))
 
         for i_fuzzy_set in range(n_sets):
-            fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_params[i_fuzzy_set]
-            fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_params[i_fuzzy_set + 1]
-            fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_params[i_fuzzy_set + 2]
+            fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_params_centers[i_fuzzy_set]
+            fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_params_centers[i_fuzzy_set + 1]
+            fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_params_centers[i_fuzzy_set + 2]
 
         for i_fuzzy_set in range(n_sets):
 
