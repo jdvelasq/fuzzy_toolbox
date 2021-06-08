@@ -357,10 +357,10 @@ class Sugeno:
                 )
 
             if self.mftype == "gaussmf":
-                self.fuzzy_set_sigmas.append([delta_x] * n_sets)
+                self.fuzzy_set_sigmas.append([delta_x / 2.0] * n_sets)
 
             if self.mftype == "gbellmf":
-                self.fuzzy_set_sigmas.append([delta_x] * n_sets)
+                self.fuzzy_set_sigmas.append([delta_x / 2.0] * n_sets)
                 self.fuzzy_set_exponents.append([1] * n_sets)
 
     def create_consequents(self, X_consequents):
