@@ -256,7 +256,6 @@ class Sugeno:
 
                 self.fuzzy_set_exponents[i_var][i_comp] -= 0.001
 
-            print(grad)
             self.fuzzy_set_exponents[i_var] = (
                 self.fuzzy_set_exponents[i_var] - learning_rate * grad
             )
