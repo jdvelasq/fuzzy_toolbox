@@ -1,5 +1,3 @@
-import logging
-
 import matplotlib.pyplot as plt
 import numpy as np
 import progressbar
@@ -31,14 +29,23 @@ class Sugeno:
 
         for i_dim in range(NDIM):
 
-            fuzzy_sets = self.fuzzy_sets[i_dim]
+            n_sets = self.num_input_mfs[i_dim]
+            fuzzy_set_params = self.fuzzy_set_params[i_dim]
+
+            fuzzy_sets = np.zeros(shape=(n_sets, 3))
+
+            for i_fuzzy_set in range(n_sets):
+                fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_params[i_fuzzy_set]
+                fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_params[i_fuzzy_set + 1]
+                fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_params[i_fuzzy_set + 2]
+
             fuzzy_sets = fuzzy_sets[fuzzy_index[:, i_dim]]
 
-            x = data[:, i_dim]
             a = fuzzy_sets[:, 0]
             b = fuzzy_sets[:, 1]
             c = fuzzy_sets[:, 2]
 
+            x = data[:, i_dim]
             membership = np.maximum(0, np.minimum((x - a) / (b - a), (c - x) / (c - b)))
             rule_memberships[:, i_dim] = membership
 
@@ -125,22 +132,23 @@ class Sugeno:
         y_pred = self.__call__(X_antecedents, X_consequents)
         mse_base = np.mean((y - y_pred) ** 2)
 
-        for i_var in range(len(self.fuzzy_sets)):
+        for i_var in range(len(self.num_input_mfs)):
 
-            grad = np.zeros(shape=self.fuzzy_sets[i_var].shape)
+            grad = np.zeros(shape=self.fuzzy_set_params[i_var].shape)
 
-            for i_set in range(len(self.fuzzy_sets[i_var])):
-                for i_comp in range(3):
+            for i_comp in range(len(self.fuzzy_set_params[i_var])):
 
-                    self.fuzzy_sets[i_var][i_set, i_comp] += 0.001
+                self.fuzzy_set_params[i_var][i_comp] += 0.001
 
-                    y_pred = self.__call__(X_antecedents, X_consequents)
-                    mse_current = np.mean((y - y_pred) ** 2)
-                    grad[i_set, i_comp] = (mse_current - mse_base) / 0.001
+                y_pred = self.__call__(X_antecedents, X_consequents)
+                mse_current = np.mean((y - y_pred) ** 2)
+                grad[i_comp] = (mse_current - mse_base) / 0.001
 
-                    self.fuzzy_sets[i_var][i_set, i_comp] -= 0.001
+                self.fuzzy_set_params[i_var][i_comp] -= 0.001
 
-            self.fuzzy_sets[i_var] = self.fuzzy_sets[i_var] - learning_rate * grad
+            self.fuzzy_set_params[i_var] = (
+                self.fuzzy_set_params[i_var] - learning_rate * grad
+            )
 
     def improve_intercepts(self, X_antecedents, X_consequents, y, learning_rate):
 
@@ -218,28 +226,20 @@ class Sugeno:
         self.x_min = x_min
         self.x_max = x_max
 
-        antecedents = []
+        self.fuzzy_set_params = []
+
         for i_var in range(len(x_min)):
 
-            n_divs = self.num_input_mfs[i_var] - 1
             n_sets = self.num_input_mfs[i_var]
+            delta_x = (x_max[i_var] - x_min[i_var]) / (n_sets - 1)
 
-            delta_x = (x_max[i_var] - x_min[i_var]) / n_divs
-            matrix = np.zeros(shape=(n_sets, 3))
-
-            matrix[:, 0] = np.linspace(
-                start=x_min[i_var] - delta_x, stop=x_max[i_var] - delta_x, num=n_sets
+            self.fuzzy_set_params.append(
+                np.linspace(
+                    start=x_min[i_var] - delta_x,
+                    stop=x_max[i_var] + delta_x,
+                    num=n_sets + 2,
+                )
             )
-            matrix[:, 1] = np.linspace(
-                start=x_min[i_var], stop=x_max[i_var], num=n_sets
-            )
-            matrix[:, 2] = np.linspace(
-                start=x_min[i_var] + delta_x, stop=x_max[i_var] + delta_x, num=n_sets
-            )
-
-            antecedents.append(matrix)
-
-        self.fuzzy_sets = antecedents
 
     def create_consequents(self, X_consequents):
         n_vars = X_consequents.shape[1]
