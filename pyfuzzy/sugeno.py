@@ -33,20 +33,16 @@ class Sugeno:
         for i_dim in range(NDIM):
 
             n_sets = self.num_input_mfs[i_dim]
-            fuzzy_set_params_centers = self.fuzzy_set_params_centers[i_dim]
+            fuzzy_set_centers = self.fuzzy_set_centers[i_dim]
 
             if self.mftype == "trimf":
 
                 fuzzy_sets = np.zeros(shape=(n_sets, 3))
 
                 for i_fuzzy_set in range(n_sets):
-                    fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_params_centers[i_fuzzy_set]
-                    fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_params_centers[
-                        i_fuzzy_set + 1
-                    ]
-                    fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_params_centers[
-                        i_fuzzy_set + 2
-                    ]
+                    fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_centers[i_fuzzy_set]
+                    fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_centers[i_fuzzy_set + 1]
+                    fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_centers[i_fuzzy_set + 2]
 
                 fuzzy_sets = fuzzy_sets[fuzzy_index[:, i_dim]]
 
@@ -151,20 +147,20 @@ class Sugeno:
 
         for i_var in range(len(self.num_input_mfs)):
 
-            grad = np.zeros(shape=self.fuzzy_set_params[i_var].shape)
+            grad = np.zeros(shape=self.fuzzy_set_centers[i_var].shape)
 
-            for i_comp in range(len(self.fuzzy_set_params[i_var])):
+            for i_comp in range(len(self.fuzzy_set_centers[i_var])):
 
-                self.fuzzy_set_params[i_var][i_comp] += 0.001
+                self.fuzzy_set_centers[i_var][i_comp] += 0.001
 
                 y_pred = self.__call__(X_antecedents, X_consequents)
                 mse_current = np.mean((y - y_pred) ** 2)
                 grad[i_comp] = (mse_current - mse_base) / 0.001
 
-                self.fuzzy_set_params[i_var][i_comp] -= 0.001
+                self.fuzzy_set_centers[i_var][i_comp] -= 0.001
 
-            self.fuzzy_set_params[i_var] = (
-                self.fuzzy_set_params[i_var] - learning_rate * grad
+            self.fuzzy_set_centers[i_var] = (
+                self.fuzzy_set_centers[i_var] - learning_rate * grad
             )
 
     def improve_intercepts(self, X_antecedents, X_consequents, y, learning_rate):
@@ -243,14 +239,14 @@ class Sugeno:
         self.x_min = x_min
         self.x_max = x_max
 
-        self.fuzzy_set_params_center = []
+        self.fuzzy_set_centers = []
 
         for i_var in range(len(x_min)):
 
             n_sets = self.num_input_mfs[i_var]
             delta_x = (x_max[i_var] - x_min[i_var]) / (n_sets - 1)
 
-            self.fuzzy_set_params_center.append(
+            self.fuzzy_set_centers.append(
                 np.linspace(
                     start=x_min[i_var] - delta_x,
                     stop=x_max[i_var] + delta_x,
@@ -274,14 +270,14 @@ class Sugeno:
         x = np.linspace(start=x_min, stop=x_max, num=100)
 
         n_sets = self.num_input_mfs[i_var]
-        fuzzy_set_params_centers = self.fuzzy_set_params_centers[i_var]
+        fuzzy_set_centers = self.fuzzy_set_centers[i_var]
 
         fuzzy_sets = np.zeros(shape=(n_sets, 3))
 
         for i_fuzzy_set in range(n_sets):
-            fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_params_centers[i_fuzzy_set]
-            fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_params_centers[i_fuzzy_set + 1]
-            fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_params_centers[i_fuzzy_set + 2]
+            fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_centers[i_fuzzy_set]
+            fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_centers[i_fuzzy_set + 1]
+            fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_centers[i_fuzzy_set + 2]
 
         for i_fuzzy_set in range(n_sets):
 
