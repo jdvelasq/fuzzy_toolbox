@@ -16,6 +16,10 @@ class Sugeno:
         else:
             self.rng = np.random.default_rng(seed)
 
+        self.fuzzy_set_centers = None
+        self.fuzzy_set_sigmas = None
+        self.fuzzy_set_exponents = None
+
         self.antecedents = None
         self.rule_output = None
 
@@ -44,18 +48,41 @@ class Sugeno:
                     fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_centers[i_fuzzy_set + 1]
                     fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_centers[i_fuzzy_set + 2]
 
-                fuzzy_sets = fuzzy_sets[fuzzy_index[:, i_dim]]
+                fuzzy_sets_centers = fuzzy_sets[fuzzy_index[:, i_dim]]
 
-                a = fuzzy_sets[:, 0]
-                b = fuzzy_sets[:, 1]
-                c = fuzzy_sets[:, 2]
+                a = fuzzy_sets_centers[:, 0]
+                b = fuzzy_sets_centers[:, 1]
+                c = fuzzy_sets_centers[:, 2]
 
                 x = data[:, i_dim]
                 membership = np.maximum(
                     0, np.minimum((x - a) / (b - a), (c - x) / (c - b))
                 )
 
-            # if self.mftype == "gaussmf":
+            if self.mftype == "gaussmf":
+                fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_dim]
+                fuzzy_sets_sigmas = fuzzy_set_sigmas[fuzzy_index[:, i_dim]]
+
+                x = data[:, i_dim]
+
+                membership = np.exp(
+                    -(((x - fuzzy_set_centers) / fuzzy_set_sigmas) ** 2)
+                )
+
+            if self.mftype == "gbellmf":
+
+                fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_dim]
+                fuzzy_sets_sigmas = fuzzy_set_sigmas[fuzzy_index[:, i_dim]]
+
+                fuzzy_set_exponents = self.fuzzy_set_exponents[i_dim]
+                fuzzy_sets_exponents = fuzzy_set_exponents[fuzzy_index[:, i_dim]]
+
+                x = data[:, i_dim]
+
+                membership = 1 / np.power(
+                    1 + ((x - fuzzy_set_centers) / fuzzy_set_sigmas) ** 2,
+                    fuzzy_set_exponents,
+                )
 
             rule_memberships[:, i_dim] = membership
 
@@ -142,6 +169,12 @@ class Sugeno:
 
     def improve_fuzzysets(self, X_antecedents, X_consequents, y, learning_rate):
 
+        self.improve_fuzzysets_centers(X_antecedents, X_consequents, y, learning_rate)
+        self.improve_fuzzysets_sigmas(X_antecedents, X_consequents, y, learning_rate)
+        self.improve_fuzzysets_exponents(X_antecedents, X_consequents, y, learning_rate)
+
+    def improve_fuzzysets_centers(self, X_antecedents, X_consequents, y, learning_rate):
+
         y_pred = self.__call__(X_antecedents, X_consequents)
         mse_base = np.mean((y - y_pred) ** 2)
 
@@ -161,6 +194,60 @@ class Sugeno:
 
             self.fuzzy_set_centers[i_var] = (
                 self.fuzzy_set_centers[i_var] - learning_rate * grad
+            )
+
+    def improve_fuzzysets_sigmas(self, X_antecedents, X_consequents, y, learning_rate):
+
+        if self.fuzzy_set_sigmas is None:
+            return
+
+        y_pred = self.__call__(X_antecedents, X_consequents)
+        mse_base = np.mean((y - y_pred) ** 2)
+
+        for i_var in range(len(self.num_input_mfs)):
+
+            grad = np.zeros(shape=self.fuzzy_set_sigmas[i_var].shape)
+
+            for i_comp in range(len(self.fuzzy_set_centers[i_var])):
+
+                self.fuzzy_set_sigmas[i_var][i_comp] += 0.001
+
+                y_pred = self.__call__(X_antecedents, X_consequents)
+                mse_current = np.mean((y - y_pred) ** 2)
+                grad[i_comp] = (mse_current - mse_base) / 0.001
+
+                self.fuzzy_set_sigmas[i_var][i_comp] -= 0.001
+
+            self.fuzzy_set_sigmas[i_var] = (
+                self.fuzzy_set_sigmas[i_var] - learning_rate * grad
+            )
+
+    def improve_fuzzysets_exponents(
+        self, X_antecedents, X_consequents, y, learning_rate
+    ):
+
+        if self.fuzzy_set_exponents is None:
+            return
+
+        y_pred = self.__call__(X_antecedents, X_consequents)
+        mse_base = np.mean((y - y_pred) ** 2)
+
+        for i_var in range(len(self.num_input_mfs)):
+
+            grad = np.zeros(shape=self.fuzzy_set_sigmas[i_var].shape)
+
+            for i_comp in range(len(self.fuzzy_set_centers[i_var])):
+
+                self.fuzzy_set_exponents[i_var][i_comp] += 0.001
+
+                y_pred = self.__call__(X_antecedents, X_consequents)
+                mse_current = np.mean((y - y_pred) ** 2)
+                grad[i_comp] = (mse_current - mse_base) / 0.001
+
+                self.fuzzy_set_exponents[i_var][i_comp] -= 0.001
+
+            self.fuzzy_set_exponents[i_var] = (
+                self.fuzzy_set_exponents[i_var] - learning_rate * grad
             )
 
     def improve_intercepts(self, X_antecedents, X_consequents, y, learning_rate):
@@ -240,6 +327,11 @@ class Sugeno:
         self.x_max = x_max
 
         self.fuzzy_set_centers = []
+        if self.mftype == "gaussmf":
+            self.fuzzy_set_sigmas = []
+        if self.mftype == "gbellmf":
+            self.fuzzy_set_sigmas = []
+            self.fuzzy_set_exponents = []
 
         for i_var in range(len(x_min)):
 
@@ -253,6 +345,13 @@ class Sugeno:
                     num=n_sets + 2,
                 )
             )
+
+            if self.mftype == "gaussmf":
+                self.fuzzy_set_sigmas.append([delta_x] * n_sets)
+
+            if self.mftype == "gbellmf":
+                self.fuzzy_set_sigmas.append([delta_x] * n_sets)
+                self.fuzzy_set_exponents.append([1] * n_sets)
 
     def create_consequents(self, X_consequents):
         n_vars = X_consequents.shape[1]
