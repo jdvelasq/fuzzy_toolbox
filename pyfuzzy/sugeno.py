@@ -30,10 +30,35 @@ class Sugeno:
         self.compute_consequents(X_consequents)
         return self.compute_weighted_output()
 
-    def compute_antecedents(self, X):
+    def compute_lstsq(self, X_antecedents, X_consequents, y):
 
-        self.compute_memberships_by_rule_per_var(X)
-        self.compute_normalized_rule_weights()
+        current_mse = np.mean((y - self.__call__(X_antecedents, X_consequents)) ** 2)
+        current_intercept_ = self.intercept_
+        current_coefs_ = self.coefs_
+
+        #
+        #
+        #
+        NRULES = len(self.rules)
+        NVARS = len(self.rules[0])
+
+        memberships = self.rule_memberships.copy()
+        memberships = np.repeat(memberships, NVARS, axis=1)
+        x_ = np.tile(X_consequents, (1, NRULES))
+        A = np.append(memberships * x_, memberships, axis=1)
+
+        solution = np.linalg.lstsq(A, y, rcond=None)[0]
+        self.intercept_ = solution[-NRULES:]
+
+        solution = solution[:-NRULES]
+        coefs = solution[:-NRULES].reshape((NRULES, NVARS))
+        self.coefs_ = coefs
+
+        mse = np.mean((y - self.__call__(X_antecedents, X_consequents)) ** 2)
+
+        if mse >= current_mse:
+            self.intercept_ = current_intercept_
+            self.coefs_ = current_coefs_
 
     def compute_normalized_rule_weights(self, X):
 
@@ -97,9 +122,9 @@ class Sugeno:
             c = fuzzy_sets_centers[:, 2]
 
             x = self.data[:, i_dim]
-            membership = np.maximum(0, np.minimum((x - a) / (b - a), (c - x) / (c - b)))
-
-            self.memberships_by_rule_per_var[:, i_dim] = membership
+            self.memberships_by_rule_per_var[:, i_dim] = np.maximum(
+                0, np.minimum((x - a) / (b - a), (c - x) / (c - b))
+            )
 
     def compute_memberships_by_rule_per_var_gaussmf(self):
 
@@ -117,9 +142,9 @@ class Sugeno:
 
             x = self.data[:, i_dim]
 
-            membership = np.exp(-(((x - fuzzy_set_centers) / fuzzy_set_sigmas) ** 2))
-
-            self.memberships_by_rule_per_var[:, i_dim] = membership
+            self.memberships_by_rule_per_var[:, i_dim] = np.exp(
+                -(((x - fuzzy_set_centers) / fuzzy_set_sigmas) ** 2)
+            )
 
     def compute_memberships_by_rule_per_var_gbellmf(self):
 
@@ -127,7 +152,7 @@ class Sugeno:
 
         for i_dim in range(NDIM):
 
-            n_sets = self.num_input_mfs[i_dim]
+            # n_sets = self.num_input_mfs[i_dim]
 
             fuzzy_set_centers = self.fuzzy_set_centers[i_dim]
             fuzzy_set_centers = fuzzy_set_centers[self.antecedent_fuzzy_sets[:, i_dim]]
@@ -142,15 +167,13 @@ class Sugeno:
 
             x = self.data[:, i_dim]
 
-            membership = 1 / (
+            self.memberships_by_rule_per_var[:, i_dim] = 1 / (
                 1
                 + np.power(
                     ((x - fuzzy_set_centers) / fuzzy_set_sigmas) ** 2,
                     fuzzy_set_exponents,
                 )
             )
-
-            self.memberships_by_rule_per_var[:, i_dim] = membership
 
     def compute_consequents(self, X):
 
@@ -210,7 +233,16 @@ class Sugeno:
 
                 self.fuzzy_set_centers[i_var][i_comp] += 0.001
 
-                y_pred = self.__call__(X_antecedents, X_consequents)
+                #
+                self.compute_memberships_by_rule_per_var(X_antecedents)
+                self.compute_normalized_rule_weights(X_antecedents)
+                self.compute_lstsq(X_antecedents, X_consequents, y)
+                self.compute_consequents(X_consequents)
+                y_pred = self.compute_weighted_output()
+                #
+
+                # y_pred = self.__call__(X_antecedents, X_consequents)
+
                 mse_current = np.mean((y - y_pred) ** 2)
                 grad[i_comp] = (mse_current - mse_base) / 0.001
 
@@ -403,101 +435,94 @@ class Sugeno:
         self.intercept_ = np.array([m.intercept_] * NRULES)
 
     def plot_fuzzysets(self, i_var, figsize=(8, 3)):
+        #
+        def plot_trimf():
 
-        if self.mftype == "trimf":
-            return self.plot_fuzzysets_trimf(i_var=i_var, figsize=figsize)
-        if self.mftype == "gaussmf":
-            return self.plot_fuzzysets_gaussmf(i_var=i_var, figsize=figsize)
-        if self.mftype == "gbellmf":
-            return self.plot_fuzzysets_gbellmf(i_var=i_var, figsize=figsize)
+            fuzzy_set_centers = self.fuzzy_set_centers[i_var]
 
+            fuzzy_sets = np.zeros(shape=(n_sets, 3))
+
+            for i_fuzzy_set in range(n_sets):
+                fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_centers[i_fuzzy_set]
+                fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_centers[i_fuzzy_set + 1]
+                fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_centers[i_fuzzy_set + 2]
+
+            for i_fuzzy_set in range(n_sets):
+
+                a = fuzzy_sets[i_fuzzy_set, 0]
+                b = fuzzy_sets[i_fuzzy_set, 1]
+                c = fuzzy_sets[i_fuzzy_set, 2]
+
+                membership = np.maximum(
+                    0, np.minimum((x - a) / (b - a), (c - x) / (c - b))
+                )
+                plt.plot(x, membership)
+
+        def plot_gaussmf():
+
+            fuzzy_set_centers = self.fuzzy_set_centers[i_var]
+            fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_var]
+
+            for i_fuzzy_set in range(n_sets):
+                c = fuzzy_set_centers[i_fuzzy_set]
+                s = fuzzy_set_sigmas[i_fuzzy_set]
+                membership = np.exp(-(((x - c) / s) ** 2))
+                plt.plot(x, membership)
+
+        def plot_gbellmf():
+
+            fuzzy_set_centers = self.fuzzy_set_centers[i_var]
+            fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_var]
+            fuzzy_set_exponents = self.fuzzy_set_exponents[i_var]
+
+            for i_fuzzy_set in range(n_sets):
+                c = fuzzy_set_centers[i_fuzzy_set]
+                s = fuzzy_set_sigmas[i_fuzzy_set]
+                e = fuzzy_set_exponents[i_fuzzy_set]
+                membership = 1 / (1 + np.power(((x - c) / s) ** 2, e))
+                plt.plot(x, membership)
+
+        n_sets = self.num_input_mfs[i_var]
+        x_min = self.x_min[i_var]
+        x_max = self.x_max[i_var]
+        x = np.linspace(start=x_min, stop=x_max, num=100)
+
+        plot_fn = {
+            "trimf": plot_trimf,
+            "gaussmf": plot_gaussmf,
+            "gbellmf": plot_gbellmf,
+        }[self.mftype]
+
+        plt.figure(figsize=figsize)
+        plot_fn()
         plt.ylim(-0.05, 1.05)
         plt.gca().spines["left"].set_color("lightgray")
         plt.gca().spines["bottom"].set_color("gray")
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
 
-    def plot_fuzzysets_gaussmf(self, i_var, figsize=(8, 3)):
 
-        n_sets = self.num_input_mfs[i_var]
-        x_min = self.x_min[i_var]
-        x_max = self.x_max[i_var]
-        x = np.linspace(start=x_min, stop=x_max, num=100)
+# x1 = np.linspace(start=0, stop=10, num=100)
+# x2 = np.random.uniform(0, 10, 100)
+# y1 = np.sin(x1) + np.cos(x1)
+# y2 = (y1) / np.exp(x1)
 
-        n_sets = self.num_input_mfs[i_var]
-        fuzzy_set_centers = self.fuzzy_set_centers[i_var]
-        fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_var]
-
-        plt.figure(figsize=figsize)
-        for i_fuzzy_set in range(n_sets):
-            c = fuzzy_set_centers[i_fuzzy_set]
-            s = fuzzy_set_sigmas[i_fuzzy_set]
-            membership = np.exp(-(((x - c) / s) ** 2))
-            plt.plot(x, membership)
-
-    def plot_fuzzysets_gbellmf(self, i_var, figsize=(8, 3)):
-
-        n_sets = self.num_input_mfs[i_var]
-        x_min = self.x_min[i_var]
-        x_max = self.x_max[i_var]
-        x = np.linspace(start=x_min, stop=x_max, num=100)
-
-        n_sets = self.num_input_mfs[i_var]
-        fuzzy_set_centers = self.fuzzy_set_centers[i_var]
-        fuzzy_set_sigmas = self.fuzzy_set_sigmas[i_var]
-        fuzzy_set_exponents = self.fuzzy_set_exponents[i_var]
-
-        plt.figure(figsize=figsize)
-        for i_fuzzy_set in range(n_sets):
-            c = fuzzy_set_centers[i_fuzzy_set]
-            s = fuzzy_set_sigmas[i_fuzzy_set]
-            e = fuzzy_set_exponents[i_fuzzy_set]
-            membership = 1 / (1 + np.power(((x - c) / s) ** 2, e))
-            plt.plot(x, membership)
-
-    def plot_fuzzysets_trimf(self, i_var, figsize=(8, 3)):
-
-        plt.figure(figsize=figsize)
-
-        n_sets = self.num_input_mfs[i_var]
-        x_min = self.x_min[i_var]
-        x_max = self.x_max[i_var]
-        x = np.linspace(start=x_min, stop=x_max, num=100)
-
-        n_sets = self.num_input_mfs[i_var]
-        fuzzy_set_centers = self.fuzzy_set_centers[i_var]
-
-        fuzzy_sets = np.zeros(shape=(n_sets, 3))
-
-        for i_fuzzy_set in range(n_sets):
-            fuzzy_sets[i_fuzzy_set, 0] = fuzzy_set_centers[i_fuzzy_set]
-            fuzzy_sets[i_fuzzy_set, 1] = fuzzy_set_centers[i_fuzzy_set + 1]
-            fuzzy_sets[i_fuzzy_set, 2] = fuzzy_set_centers[i_fuzzy_set + 2]
-
-        for i_fuzzy_set in range(n_sets):
-
-            a = fuzzy_sets[i_fuzzy_set, 0]
-            b = fuzzy_sets[i_fuzzy_set, 1]
-            c = fuzzy_sets[i_fuzzy_set, 2]
-
-            membership = np.maximum(0, np.minimum((x - a) / (b - a), (c - x) / (c - b)))
-            plt.plot(x, membership)
+# import matplotlib.pyplot as plt
+# import pandas as pd
 
 
-x1 = np.linspace(start=0, stop=10, num=100)
-x2 = np.random.uniform(0, 10, 100)
-y1 = np.sin(x1) + np.cos(x1)
-y2 = (y1) / np.exp(x1)
+# X = pd.DataFrame({"x1": x1, "x2": x2})
 
-import matplotlib.pyplot as plt
-import pandas as pd
+# m = Sugeno(num_input_mfs=(3, 3), mftype="trimf", seed=1234567)
 
+# m.fit(X.values, X.values, y2, learning_rate=1.0, max_iter=0)
 
-X = pd.DataFrame({"x1": x1, "x2": x2})
+# print("\n", np.mean((y2 - m(X.values, X.values)) ** 2))
 
-m = Sugeno(num_input_mfs=(3, 3))
+# m.fit(X.values, X.values, y2, learning_rate=0.1, max_iter=200)
 
-m.fit(X.values, X.values, y2, learning_rate=0.01, max_iter=10)
+# m.plot_fuzzysets(0)
+# m.plot_fuzzysets(1)
 # np.mean((y2 - m(X.values, X.values)) ** 2)
 
 # m(X.values)
