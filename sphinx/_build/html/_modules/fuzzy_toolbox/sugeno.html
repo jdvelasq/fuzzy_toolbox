@@ -1,0 +1,757 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>fuzzy_toolbox.sugeno &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../variable.html">Fuzzy Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rule.html">Fuzzy Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mamdani.html">Mamdani fuzzy model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugeno.html">Sugeno fuzzy model</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>fuzzy_toolbox.sugeno</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fuzzy_toolbox.sugeno</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Sugeno fuzzy model</span>
+<span class="sd">==============================================================================</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">progressbar</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+
+<div class="viewcode-block" id="Sugeno"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno">[docs]</a><span class="k">class</span> <span class="nc">Sugeno</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Creates a Sugeno inference system.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num_input_mfs (tuple of integers): Number of fuzzy sets for each variable in the antecedent.</span>
+<span class="sd">        mftype (string): {&quot;trimf&quot;|&quot;gaussmf&quot;|&quot;gbellmf&quot;}. Type of memberships used.</span>
+<span class="sd">        and_operator (string): {&quot;min&quot;|&quot;prod&quot;}. Operator used to compute the firing strength of the rules.</span>
+<span class="sd">        seed (int, None): seed of the random number generator.</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">num_input_mfs</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,),</span> <span class="n">mftype</span><span class="o">=</span><span class="s2">&quot;trimf&quot;</span><span class="p">,</span> <span class="n">and_operator</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_input_mfs</span> <span class="o">=</span> <span class="n">num_input_mfs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mftype</span> <span class="o">=</span> <span class="n">mftype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">and_operator</span> <span class="o">=</span> <span class="n">and_operator</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">antecedents</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rule_output</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_memberships_by_rule_per_var</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_normalized_rule_weights</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_consequents</span><span class="p">(</span><span class="n">X_consequents</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_weighted_output</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Sugeno.compute_lstsq"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.compute_lstsq">[docs]</a>    <span class="k">def</span> <span class="nf">compute_lstsq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+        <span class="n">current_mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">current_intercept_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span>
+        <span class="n">current_coefs_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span>
+
+        <span class="c1">#</span>
+        <span class="c1">#</span>
+        <span class="c1">#</span>
+        <span class="n">NRULES</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">)</span>
+        <span class="n">NVARS</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">memberships</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rule_memberships</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">memberships</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">memberships</span><span class="p">,</span> <span class="n">NVARS</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">x_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">X_consequents</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">NRULES</span><span class="p">))</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">memberships</span> <span class="o">*</span> <span class="n">x_</span><span class="p">,</span> <span class="n">memberships</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span> <span class="o">=</span> <span class="n">solution</span><span class="p">[</span><span class="o">-</span><span class="n">NRULES</span><span class="p">:]</span>
+
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">solution</span><span class="p">[:</span><span class="o">-</span><span class="n">NRULES</span><span class="p">]</span>
+        <span class="n">coefs</span> <span class="o">=</span> <span class="n">solution</span><span class="p">[:</span><span class="o">-</span><span class="n">NRULES</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">NRULES</span><span class="p">,</span> <span class="n">NVARS</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span> <span class="o">=</span> <span class="n">coefs</span>
+
+        <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mse</span> <span class="o">&gt;=</span> <span class="n">current_mse</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span> <span class="o">=</span> <span class="n">current_intercept_</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span> <span class="o">=</span> <span class="n">current_coefs_</span></div>
+
+<div class="viewcode-block" id="Sugeno.compute_normalized_rule_weights"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.compute_normalized_rule_weights">[docs]</a>    <span class="k">def</span> <span class="nf">compute_normalized_rule_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+
+        <span class="n">NPOINTS</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">NRULES</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">)</span>
+        <span class="n">NDIM</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">and_operator</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+            <span class="n">rule_memberships</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memberships_by_rule_per_var</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">and_operator</span> <span class="o">==</span> <span class="s2">&quot;prod&quot;</span><span class="p">:</span>
+            <span class="n">rule_memberships</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memberships_by_rule_per_var</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">rule_memberships</span> <span class="o">=</span> <span class="n">rule_memberships</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">NPOINTS</span><span class="p">,</span> <span class="n">NRULES</span><span class="p">))</span>
+        <span class="n">sum_of_memberships</span> <span class="o">=</span> <span class="n">rule_memberships</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">NPOINTS</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">sum_of_memberships</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sum_of_memberships</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sum_of_memberships</span><span class="p">)</span>
+        <span class="n">sum_of_memberships</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">sum_of_memberships</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">NRULES</span><span class="p">))</span>
+        <span class="n">rule_memberships</span> <span class="o">=</span> <span class="n">rule_memberships</span> <span class="o">/</span> <span class="n">sum_of_memberships</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rule_memberships</span> <span class="o">=</span> <span class="n">rule_memberships</span></div>
+
+<div class="viewcode-block" id="Sugeno.compute_memberships_by_rule_per_var"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var">[docs]</a>    <span class="k">def</span> <span class="nf">compute_memberships_by_rule_per_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+
+        <span class="n">NPOINTS</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">NRULES</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">)</span>
+        <span class="n">NDIM</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">antecedent_fuzzy_sets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">,</span> <span class="p">(</span><span class="n">NPOINTS</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">NRULES</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memberships_by_rule_per_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">NPOINTS</span> <span class="o">*</span> <span class="n">NRULES</span><span class="p">,</span> <span class="n">NDIM</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mftype</span> <span class="o">==</span> <span class="s2">&quot;trimf&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_memberships_by_rule_per_var_trimf</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mftype</span> <span class="o">==</span> <span class="s2">&quot;gaussmf&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_memberships_by_rule_per_var_gaussmf</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mftype</span> <span class="o">==</span> <span class="s2">&quot;gbellmf&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_memberships_by_rule_per_var_gbellmf</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Sugeno.compute_memberships_by_rule_per_var_trimf"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var_trimf">[docs]</a>    <span class="k">def</span> <span class="nf">compute_memberships_by_rule_per_var_trimf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">NDIM</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">i_dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NDIM</span><span class="p">):</span>
+
+            <span class="n">n_sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_input_mfs</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span>
+
+            <span class="n">fuzzy_sets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_sets</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">fuzzy_set_centers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">i_fuzzy_set</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sets</span><span class="p">):</span>
+                <span class="n">fuzzy_sets</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">]</span>
+                <span class="n">fuzzy_sets</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_fuzzy_set</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">fuzzy_sets</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_fuzzy_set</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+
+            <span class="n">fuzzy_sets_centers</span> <span class="o">=</span> <span class="n">fuzzy_sets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">antecedent_fuzzy_sets</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]]</span>
+
+            <span class="n">a</span> <span class="o">=</span> <span class="n">fuzzy_sets_centers</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">fuzzy_sets_centers</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">fuzzy_sets_centers</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">memberships_by_rule_per_var</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">),</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">b</span><span class="p">))</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.compute_memberships_by_rule_per_var_gaussmf"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var_gaussmf">[docs]</a>    <span class="k">def</span> <span class="nf">compute_memberships_by_rule_per_var_gaussmf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">NDIM</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">i_dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NDIM</span><span class="p">):</span>
+
+            <span class="n">n_sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_input_mfs</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span>
+
+            <span class="n">fuzzy_set_centers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span>
+            <span class="n">fuzzy_set_centers</span> <span class="o">=</span> <span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">antecedent_fuzzy_sets</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]]</span>
+
+            <span class="n">fuzzy_set_sigmas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span>
+            <span class="n">fuzzy_set_sigmas</span> <span class="o">=</span> <span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">antecedent_fuzzy_sets</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]]</span>
+
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">memberships_by_rule_per_var</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+                <span class="o">-</span><span class="p">(((</span><span class="n">x</span> <span class="o">-</span> <span class="n">fuzzy_set_centers</span><span class="p">)</span> <span class="o">/</span> <span class="n">fuzzy_set_sigmas</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.compute_memberships_by_rule_per_var_gbellmf"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var_gbellmf">[docs]</a>    <span class="k">def</span> <span class="nf">compute_memberships_by_rule_per_var_gbellmf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">NDIM</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">i_dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NDIM</span><span class="p">):</span>
+
+            <span class="c1"># n_sets = self.num_input_mfs[i_dim]</span>
+
+            <span class="n">fuzzy_set_centers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span>
+            <span class="n">fuzzy_set_centers</span> <span class="o">=</span> <span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">antecedent_fuzzy_sets</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]]</span>
+
+            <span class="n">fuzzy_set_sigmas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span>
+            <span class="n">fuzzy_set_sigmas</span> <span class="o">=</span> <span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">antecedent_fuzzy_sets</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]]</span>
+
+            <span class="n">fuzzy_set_exponents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span>
+            <span class="n">fuzzy_set_exponents</span> <span class="o">=</span> <span class="n">fuzzy_set_exponents</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">antecedent_fuzzy_sets</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]</span>
+            <span class="p">]</span>
+
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">memberships_by_rule_per_var</span><span class="p">[:,</span> <span class="n">i_dim</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span>
+                <span class="mi">1</span>
+                <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span>
+                    <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">fuzzy_set_centers</span><span class="p">)</span> <span class="o">/</span> <span class="n">fuzzy_set_sigmas</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="n">fuzzy_set_exponents</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.compute_consequents"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.compute_consequents">[docs]</a>    <span class="k">def</span> <span class="nf">compute_consequents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+
+        <span class="n">NRULES</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">)</span>
+        <span class="n">NPOINTS</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span><span class="p">))</span>
+        <span class="n">intercepts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">NRULES</span><span class="p">))</span>
+        <span class="n">intercepts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">intercepts</span><span class="p">,</span> <span class="p">(</span><span class="n">NPOINTS</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">consequents</span> <span class="o">=</span> <span class="n">output</span> <span class="o">+</span> <span class="n">intercepts</span></div>
+
+<div class="viewcode-block" id="Sugeno.compute_weighted_output"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.compute_weighted_output">[docs]</a>    <span class="k">def</span> <span class="nf">compute_weighted_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rule_memberships</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequents</span>
+        <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.fit"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_structure</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="n">history</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+
+        <span class="k">if</span> <span class="n">max_iter</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="n">factor</span> <span class="o">=</span> <span class="p">(</span><span class="n">learning_rate</span> <span class="o">-</span> <span class="mf">1e-5</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_iter</span>
+
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">progressbar</span><span class="o">.</span><span class="n">progressbar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">)):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">improve_fuzzysets</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">improve_coefs</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">improve_intercepts</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+
+                <span class="n">history</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="p">)</span>
+
+                <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">learning_rate</span> <span class="o">-</span> <span class="n">factor</span>
+
+        <span class="k">return</span> <span class="n">history</span></div>
+
+<div class="viewcode-block" id="Sugeno.improve_fuzzysets"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets">[docs]</a>    <span class="k">def</span> <span class="nf">improve_fuzzysets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">improve_fuzzysets_centers</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">improve_fuzzysets_sigmas</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">improve_fuzzysets_exponents</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.improve_fuzzysets_centers"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets_centers">[docs]</a>    <span class="k">def</span> <span class="nf">improve_fuzzysets_centers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">)</span>
+        <span class="n">mse_base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i_var</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_input_mfs</span><span class="p">)):</span>
+
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i_comp</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_var</span><span class="p">])):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_var</span><span class="p">][</span><span class="n">i_comp</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.001</span>
+
+                <span class="c1">#</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">compute_memberships_by_rule_per_var</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">compute_normalized_rule_weights</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">compute_lstsq</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">compute_consequents</span><span class="p">(</span><span class="n">X_consequents</span><span class="p">)</span>
+                <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_weighted_output</span><span class="p">()</span>
+                <span class="c1">#</span>
+
+                <span class="c1"># y_pred = self.__call__(X_antecedents, X_consequents)</span>
+
+                <span class="n">mse_current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">grad</span><span class="p">[</span><span class="n">i_comp</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">mse_current</span> <span class="o">-</span> <span class="n">mse_base</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.001</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_var</span><span class="p">][</span><span class="n">i_comp</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">0.001</span>
+
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">grad</span> <span class="o">=</span> <span class="n">grad</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">grad</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.improve_fuzzysets_sigmas"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets_sigmas">[docs]</a>    <span class="k">def</span> <span class="nf">improve_fuzzysets_sigmas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">)</span>
+        <span class="n">mse_base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i_var</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_input_mfs</span><span class="p">)):</span>
+
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i_comp</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_var</span><span class="p">])):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_var</span><span class="p">][</span><span class="n">i_comp</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.001</span>
+
+                <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">)</span>
+                <span class="n">mse_current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">grad</span><span class="p">[</span><span class="n">i_comp</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">mse_current</span> <span class="o">-</span> <span class="n">mse_base</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.001</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_var</span><span class="p">][</span><span class="n">i_comp</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">0.001</span>
+
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">grad</span> <span class="o">=</span> <span class="n">grad</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">grad</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.improve_fuzzysets_exponents"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets_exponents">[docs]</a>    <span class="k">def</span> <span class="nf">improve_fuzzysets_exponents</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span>
+    <span class="p">):</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">)</span>
+        <span class="n">mse_base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i_var</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_input_mfs</span><span class="p">)):</span>
+
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i_comp</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span><span class="p">[</span><span class="n">i_var</span><span class="p">])):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span><span class="p">[</span><span class="n">i_var</span><span class="p">][</span><span class="n">i_comp</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.001</span>
+
+                <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">)</span>
+                <span class="n">mse_current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">grad</span><span class="p">[</span><span class="n">i_comp</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">mse_current</span> <span class="o">-</span> <span class="n">mse_base</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.001</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span><span class="p">[</span><span class="n">i_var</span><span class="p">][</span><span class="n">i_comp</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">0.001</span>
+
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">grad</span> <span class="o">=</span> <span class="n">grad</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">grad</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.improve_intercepts"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.improve_intercepts">[docs]</a>    <span class="k">def</span> <span class="nf">improve_intercepts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">)</span>
+        <span class="n">mse_base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span><span class="p">[</span><span class="n">i_row</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.001</span>
+            <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">)</span>
+            <span class="n">mse_current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">grad</span><span class="p">[</span><span class="n">i_row</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">mse_current</span> <span class="o">-</span> <span class="n">mse_base</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.001</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span><span class="p">[</span><span class="n">i_row</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">0.001</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">grad</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">grad</span></div>
+
+<div class="viewcode-block" id="Sugeno.improve_coefs"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.improve_coefs">[docs]</a>    <span class="k">def</span> <span class="nf">improve_coefs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">)</span>
+        <span class="n">mse_base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">i_col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span><span class="p">[</span><span class="n">i_row</span><span class="p">,</span> <span class="n">i_col</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.001</span>
+
+                <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">)</span>
+                <span class="n">mse_current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+                <span class="n">grad</span><span class="p">[</span><span class="n">i_row</span><span class="p">,</span> <span class="n">i_col</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">mse_current</span> <span class="o">-</span> <span class="n">mse_base</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.001</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span><span class="p">[</span><span class="n">i_row</span><span class="p">,</span> <span class="n">i_col</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">0.001</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">grad</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">grad</span></div>
+
+<div class="viewcode-block" id="Sugeno.create_structure"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.create_structure">[docs]</a>    <span class="k">def</span> <span class="nf">create_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_rules</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_antecedents</span><span class="p">(</span><span class="n">X_antecedents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_consequents</span><span class="p">(</span><span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.create_rules"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.create_rules">[docs]</a>    <span class="k">def</span> <span class="nf">create_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="n">sets</span><span class="p">):</span>
+            <span class="c1">#</span>
+            <span class="c1"># Esta es una función auxiliar recursiva</span>
+            <span class="c1">#</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sets</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="n">sets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">tail</span> <span class="o">=</span> <span class="n">sets</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="k">return</span> <span class="p">[[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">connect</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cur</span><span class="p">)]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rules</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_input_mfs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.create_antecedents"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.create_antecedents">[docs]</a>    <span class="k">def</span> <span class="nf">create_antecedents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_antecedents</span><span class="p">):</span>
+
+        <span class="n">x_min</span> <span class="o">=</span> <span class="n">X_antecedents</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">x_max</span> <span class="o">=</span> <span class="n">X_antecedents</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_min</span> <span class="o">=</span> <span class="n">x_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_max</span> <span class="o">=</span> <span class="n">x_max</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mftype</span> <span class="o">==</span> <span class="s2">&quot;gaussmf&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mftype</span> <span class="o">==</span> <span class="s2">&quot;gbellmf&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i_var</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_min</span><span class="p">)):</span>
+
+            <span class="n">n_sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_input_mfs</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span>
+            <span class="n">delta_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_max</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">[</span><span class="n">i_var</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_sets</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mftype</span> <span class="o">==</span> <span class="s2">&quot;trimf&quot;</span><span class="p">:</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+                        <span class="n">start</span><span class="o">=</span><span class="n">x_min</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta_x</span><span class="p">,</span>
+                        <span class="n">stop</span><span class="o">=</span><span class="n">x_max</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span> <span class="o">+</span> <span class="n">delta_x</span><span class="p">,</span>
+                        <span class="n">num</span><span class="o">=</span><span class="n">n_sets</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+                        <span class="n">start</span><span class="o">=</span><span class="n">x_min</span><span class="p">[</span><span class="n">i_var</span><span class="p">],</span>
+                        <span class="n">stop</span><span class="o">=</span><span class="n">x_max</span><span class="p">[</span><span class="n">i_var</span><span class="p">],</span>
+                        <span class="n">num</span><span class="o">=</span><span class="n">n_sets</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mftype</span> <span class="o">==</span> <span class="s2">&quot;gaussmf&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delta_x</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_sets</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mftype</span> <span class="o">==</span> <span class="s2">&quot;gbellmf&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delta_x</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_sets</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_sets</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Sugeno.create_consequents"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.create_consequents">[docs]</a>    <span class="k">def</span> <span class="nf">create_consequents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+        <span class="n">NRULES</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_input_mfs</span><span class="p">)</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_consequents</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">coef_</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">coef_</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefs_</span><span class="p">,</span> <span class="p">(</span><span class="n">NRULES</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">intercept_</span><span class="p">]</span> <span class="o">*</span> <span class="n">NRULES</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sugeno.plot_fuzzysets"><a class="viewcode-back" href="../../sugeno.html#fuzzy_toolbox.sugeno.Sugeno.plot_fuzzysets">[docs]</a>    <span class="k">def</span> <span class="nf">plot_fuzzysets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_var</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">)):</span>
+        <span class="c1">#</span>
+        <span class="k">def</span> <span class="nf">plot_trimf</span><span class="p">():</span>
+
+            <span class="n">fuzzy_set_centers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span>
+
+            <span class="n">fuzzy_sets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_sets</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">i_fuzzy_set</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sets</span><span class="p">):</span>
+                <span class="n">fuzzy_sets</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">]</span>
+                <span class="n">fuzzy_sets</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_fuzzy_set</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">fuzzy_sets</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_fuzzy_set</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">i_fuzzy_set</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sets</span><span class="p">):</span>
+
+                <span class="n">a</span> <span class="o">=</span> <span class="n">fuzzy_sets</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">fuzzy_sets</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">fuzzy_sets</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+                <span class="n">membership</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                    <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">),</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">b</span><span class="p">))</span>
+                <span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">membership</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">plot_gaussmf</span><span class="p">():</span>
+
+            <span class="n">fuzzy_set_centers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span>
+            <span class="n">fuzzy_set_sigmas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">i_fuzzy_set</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sets</span><span class="p">):</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">]</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">]</span>
+                <span class="n">membership</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(((</span><span class="n">x</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">/</span> <span class="n">s</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">membership</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">plot_gbellmf</span><span class="p">():</span>
+
+            <span class="n">fuzzy_set_centers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span>
+            <span class="n">fuzzy_set_sigmas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span>
+            <span class="n">fuzzy_set_exponents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_set_exponents</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">i_fuzzy_set</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sets</span><span class="p">):</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">fuzzy_set_centers</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">]</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">fuzzy_set_sigmas</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">]</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="n">fuzzy_set_exponents</span><span class="p">[</span><span class="n">i_fuzzy_set</span><span class="p">]</span>
+                <span class="n">membership</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(((</span><span class="n">x</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">/</span> <span class="n">s</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">membership</span><span class="p">)</span>
+
+        <span class="n">n_sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_input_mfs</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span>
+        <span class="n">x_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_min</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span>
+        <span class="n">x_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_max</span><span class="p">[</span><span class="n">i_var</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">x_min</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">x_max</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+        <span class="n">plot_fn</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;trimf&quot;</span><span class="p">:</span> <span class="n">plot_trimf</span><span class="p">,</span>
+            <span class="s2">&quot;gaussmf&quot;</span><span class="p">:</span> <span class="n">plot_gaussmf</span><span class="p">,</span>
+            <span class="s2">&quot;gbellmf&quot;</span><span class="p">:</span> <span class="n">plot_gbellmf</span><span class="p">,</span>
+        <span class="p">}[</span><span class="bp">self</span><span class="o">.</span><span class="n">mftype</span><span class="p">]</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+        <span class="n">plot_fn</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s2">&quot;lightgray&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># x1 = np.linspace(start=0, stop=10, num=100)</span>
+<span class="c1"># x2 = np.random.uniform(0, 10, 100)</span>
+<span class="c1"># y1 = np.sin(x1) + np.cos(x1)</span>
+<span class="c1"># y2 = (y1) / np.exp(x1)</span>
+
+<span class="c1"># import matplotlib.pyplot as plt</span>
+<span class="c1"># import pandas as pd</span>
+
+
+<span class="c1"># X = pd.DataFrame({&quot;x1&quot;: x1, &quot;x2&quot;: x2})</span>
+
+<span class="c1"># m = Sugeno(num_input_mfs=(3, 3), mftype=&quot;trimf&quot;, seed=1234567)</span>
+
+<span class="c1"># m.fit(X.values, X.values, y2, learning_rate=1.0, max_iter=0)</span>
+
+<span class="c1"># print(&quot;\n&quot;, np.mean((y2 - m(X.values, X.values)) ** 2))</span>
+
+<span class="c1"># m.fit(X.values, X.values, y2, learning_rate=0.1, max_iter=200)</span>
+
+<span class="c1"># m.plot_fuzzysets(0)</span>
+<span class="c1"># m.plot_fuzzysets(1)</span>
+<span class="c1"># np.mean((y2 - m(X.values, X.values)) ** 2)</span>
+
+<span class="c1"># m(X.values)</span>
+
+<span class="c1"># y_pred = m(X.values)</span>
+<span class="c1"># plt.plot(y2, &quot;-k&quot;)</span>
+<span class="c1"># plt.plot(y_pred, &quot;-r&quot;)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

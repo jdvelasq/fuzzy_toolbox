@@ -1,9 +1,26 @@
+"""
+Fuzzy Rules
+==============================================================================
+
+"""
+
 import numpy as np
 
 from .variable import FuzzyVariable
 
 
 class FuzzyRule:
+    """Mamdani fuzzy rule.
+
+    Creates a Mamdani fuzzy fule.
+
+    Args:
+        antecedents (list of tuples): Fuzzy variables in the rule antecedent.
+        consequent (tuple): Fuzzy variable in the consequence.
+        is_and (bool): When True, membership values are combined using the specified AND operator; when False, the OR operator is used.
+
+    """
+
     def __init__(
         self,
         antecedents,
@@ -43,22 +60,40 @@ class FuzzyRule:
         return text
 
     def get_consequent_universe(self):
+        """Gets the universe of the fuzzy variable in the consquent."""
+
         return self.consequent[0].universe
 
     def get_consequent_membership(self):
+        """Gets the membership of the fuzzy variable in the consquent."""
         return self.consequent[0].sets[self.consequent[-1]]
 
     def get_consequent_name(self):
+        """Gets the name of the fuzzy variable in the consquent."""
         return self.consequent[0].name
 
     def compute_inference(
         self, and_operator, or_operator, implication_operator, **values
     ):
+        """Computes the output fuzzy set of the rule.
+
+        Args:
+            and_operator (string): {"min"|"prod"}
+            or_operator (string): {"max"|"probor"}
+            implication_operator (string): {"min"|"prod"}
+            values (dict): Crisp values for the antecedent variables.
+
+        """
         self.compute_memberships(**values)
         self.combine_inputs(and_operator, or_operator)
         self.compute_implication(implication_operator)
 
     def compute_memberships(self, **values):
+        """Computes the memberships of the antecedents
+
+        Args:
+            values (dictionary): crisp values for the antecedentes in the rule.
+        """
         self.memberships = []
 
         for antecedent in self.antecedents:
@@ -85,6 +120,13 @@ class FuzzyRule:
             self.memberships.append(membership)
 
     def combine_inputs(self, and_operator, or_operator):
+        """Computes the firing strength of the rule.
+
+        Args:
+            and_operator (string): {"min"|"prod"}
+            or_operator (string): {"max"|"probor"}
+
+        """
 
         if len(self.memberships) > 1 and self.is_and is True:
             operator = {
@@ -115,6 +157,12 @@ class FuzzyRule:
         self.combined_input = self.memberships
 
     def compute_implication(self, implication_operator):
+        """Computes the implication of the rule.
+
+        Args:
+            implication_operator (string): {"min"|"prod"}
+
+        """
 
         if len(self.consequent) == 2:
             modifier = None

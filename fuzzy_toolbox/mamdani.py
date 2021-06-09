@@ -1,9 +1,26 @@
+"""
+Mamdani fuzzy model
+==============================================================================
+
+"""
+
 from .rule import FuzzyRule
 from .variable import FuzzyVariable
 
 
 class Mamdani:
-    """Mamdani inference system"""
+    """Crates a Mamdani inference system.
+
+    Args:
+        rules (list): List of fuzzy rules.
+        and_operator (string): {"min", "prod"}. Operator used for rules using AND.
+        or_operator (string): {"max"|"probor"}. Operator used for rules using OR.
+        implication_operator (string): {"min", "prod"}.
+        aggregation_operator (string): {"max"|"probor"}.
+        defuzzification_operator (string): {"cog"|"bisection"|"mom"|"lom"|"som"}
+
+
+    """
 
     def __init__(
         self,
@@ -25,19 +42,18 @@ class Mamdani:
         self.values = None
 
     def __call__(self, **values):
-        #
-        # El proceso de calculo contiene siguientes pasos
-        #
+        """Computes the output of the Mamdani inference system.
+
+        Args:
+            values (dict): Values for the variables in the antecedent.
+        """
         self.values = values
         self.compute_rules()
         self.compute_aggregation()
         return self.compute_defuzzification()
 
     def compute_rules(self):
-        #
-        # Calcula el consecuente de cada regla usando el
-        # operador de composición especificado.
-        #
+        """Computes the output fuzzy set of each rule."""
         for rule in self.rules:
             rule.compute_inference(
                 and_operator=self.and_operator,
@@ -47,11 +63,7 @@ class Mamdani:
             )
 
     def compute_aggregation(self):
-
-        #
-        # Se geenera una variable difusa cuyos conjuntos
-        # borrosos son los resultados de cada regla difusa
-        #
+        """Computes the output fuzzy set of the inference system."""
         for i_rule, rule in enumerate(self.rules):
             if i_rule == 0:
                 self.output = FuzzyVariable(
@@ -72,8 +84,5 @@ class Mamdani:
         self.output.aggregate()
 
     def compute_defuzzification(self):
-        #
-        # El conjunto borroso se convierte en un valor
-        # crisp
-        #
+        """Computes the equivalent crisp value representing the output fuzzy set of the system."""
         return self.output.defuzzification(operator=self.defuzzification_operator)

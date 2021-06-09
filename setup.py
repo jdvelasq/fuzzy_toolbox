@@ -2,17 +2,17 @@ from setuptools import setup
 
 
 setup(
-    name="pyfuzzy",
+    name="fuzzy-toolbox",
     version="0.1.0",
     author="Juan D. Velasquez",
     author_email="jdvelasq@unal.edu.co",
     license="MIT",
-    url="http://github.com/jdvelasq/pyfuzzy",
-    description="Fuzzy Inference Systems",
-    long_description="Fuzzy Inference Systems",
+    url="http://github.com/jdvelasq/fuzzy-toolbox",
+    description="Fuzzy Toolbox",
+    long_description="Fuzzy Inference Systems Toolbox",
     keywords="fuzzy",
     platforms="any",
-    provides=["pyfuzzy"],
+    provides=["fuzzy_toolbox"],
     install_requires=[
         "numpy",
         "matplotlib",
@@ -21,7 +21,7 @@ setup(
     packages=[
         "pyfuzzy",
     ],
-    package_dir={"pyfuzzy": "pyfuzzy"},
+    package_dir={"fuzzy_toolbox": "pyfuzzy_toolbox"},
     include_package_data=True,
     classifiers=[
         "Development Status :: 3 - Alpha",

@@ -1,6 +1,3 @@
-Fuzzy Toolbox for Python
-============================================================================================
-
 *Fuzzy-Toolbox* is a package for mining relevant information about topics related to Research and 
 Development (R&D) literature extracted from bibliographical databases as Scopus. *TechMiner*
 facilitates studies of systematic mapping of literature and Tech mining studies. The package can 
@@ -97,7 +94,10 @@ Table of Contents
 .. toctree::
    :maxdepth: 2
 
-   modules
+   variable
+   rule
+   mamdani
+   sugeno
 
 * :ref:`genindex`
 * :ref:`modindex`

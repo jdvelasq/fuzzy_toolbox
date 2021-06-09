@@ -1,19 +1,61 @@
+"""
+Fuzzy Variables
+==============================================================================
+
+"""
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 
 
 def gaussmf(x, center=0, sigma=1):
-    """ """
+    """Gaussian membership function.
+
+    This function computes fuzzy membership values using a Gaussian membership function using NumPy.
+
+    Args:
+        x (float, np.array): input value.
+        center (float): Center of the distribution.
+        sigma (float): standard deviation.
+
+    Returns:
+        A numpy.array.
+    """
     return np.exp(-((x - center) ** 2) / (2 * sigma))
 
 
 def gbellmf(x, a=1, b=1, c=0):
-    """ """
+    """Generalized bell-shaped membership function.
+
+    This function computes fuzzy membership values using a generalized bell membership function using NumPy.
+
+    Args:
+        x (float, np.array): input value.
+        a (float): standard deviation.
+        b (float): exponent.
+        c (float): center.
+
+    Returns:
+        A numpy.array.
+    """
     return 1 / (1 + np.abs((x - c) / a) ** (2 * b))
 
 
 def trimf(x, a, b, c):
-    """ """
+    """Triangular membership function.
+
+    This function computes fuzzy membership values using a triangular membership function using NumPy.
+
+    Args:
+        x (float, np.array): input value.
+        a (float): Left feet.
+        b (float): center or peak.
+        c (float): right feet.
+
+    Returns:
+        A numpy.array.
+    """
     return np.where(
         x <= a,
         0,
@@ -22,6 +64,20 @@ def trimf(x, a, b, c):
 
 
 def pimf(x, a, b, c, d):
+    """Pi-shaped membership function.
+
+    This function computes fuzzy membership values using a pi-shaped membership function using NumPy.
+
+    Args:
+        x (float, np.array): input value.
+        a (float): Left feet.
+        b (float): Left peak.
+        c (float): Right peak.
+        d (float): Right feet.
+
+    Returns:
+        A numpy.array.
+    """
     return np.where(
         x <= a,
         0,
@@ -42,10 +98,34 @@ def pimf(x, a, b, c, d):
 
 
 def sigmf(x, a, c):
+    """Sigmoidal membership function.
+
+    This function computes fuzzy membership values using a sigmoidal membership function using NumPy.
+
+    Args:
+        x (float, np.array): input value.
+        a (float): slope.
+        c (float): center.
+
+    Returns:
+        A numpy.array.
+    """
     return 1 / (1 + np.exp(-a * (x - c)))
 
 
 def smf(x, a, b):
+    """S-shaped membership function
+
+    This function computes fuzzy membership values using a S-shaped membership function using NumPy.
+
+    Args:
+        x (float, np.array): input value.
+        a (float): Left feet.
+        b (float): Right peak.
+
+    Returns:
+        A numpy.array.
+    """
     return np.where(
         x <= a,
         0,
@@ -58,6 +138,21 @@ def smf(x, a, b):
 
 
 def trapmf(x, a, b, c, d):
+    """Trapezoida membership function
+
+    This function computes fuzzy membership values using a trapezoidal membership function using NumPy.
+
+    Args:
+        x (float, np.array): input value.
+        a (float): Left feet.
+        b (float): Left peak.
+        c (float): Right peak.
+        d (float): Right feet.
+
+    Returns:
+        A numpy.array.
+    """
+
     return np.where(
         x <= a,
         0,
@@ -70,6 +165,18 @@ def trapmf(x, a, b, c, d):
 
 
 def zmf(x, a, b):
+    """Z-shaped membership function
+
+    This function computes fuzzy membership values using a Z-shaped membership function using NumPy.
+
+    Args:
+        x (float, np.array): input value.
+        a (float): Left peak.
+        b (float): Right feet.
+
+    Returns:
+        A numpy.array.
+    """
     return np.where(
         x <= a,
         1,
@@ -133,6 +240,14 @@ class FuzzyVariable:
         plt.gca().spines["right"].set_visible(False)
 
     def get_modified_membership(self, fuzzyset, modifier, negation):
+        """Computes a modified membership function.
+
+        Args:
+            fuzzyset (string): Identifier of the fuzzy set.
+            modifier (string): {"very"|"somewhat"|"more_or_less"|"extremely"|"plus"|"intensify"|"slightly"|None}
+            negation (bool): When True computes the negation of the fuzzy set.
+
+        """
 
         membership = self.sets[fuzzyset]
         if modifier is not None:
@@ -220,7 +335,16 @@ class FuzzyVariable:
         self.sets = {"aggregation": aggregation}
 
     def defuzzification(self, fuzzyset="aggregation", operator="cog"):
-        """ """
+        """Computes a representative crisp value for the fuzzy set.
+
+        Args:
+            fuzzyset (string): Fuzzy set to defuzzify
+            operator (string): {"cog"|"bisection"|"mom"|"lom"|"som"}
+
+        Returns:
+            A float value.
+
+        """
 
         if operator == "cog":
             #

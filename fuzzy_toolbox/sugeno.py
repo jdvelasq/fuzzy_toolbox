@@ -1,3 +1,9 @@
+"""
+Sugeno fuzzy model
+==============================================================================
+
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 import progressbar
@@ -5,6 +11,17 @@ from sklearn.linear_model import LinearRegression
 
 
 class Sugeno:
+    """Creates a Sugeno inference system.
+
+    Args:
+        num_input_mfs (tuple of integers): Number of fuzzy sets for each variable in the antecedent.
+        mftype (string): {"trimf"|"gaussmf"|"gbellmf"}. Type of memberships used.
+        and_operator (string): {"min"|"prod"}. Operator used to compute the firing strength of the rules.
+        seed (int, None): seed of the random number generator.
+
+
+    """
+
     def __init__(
         self, num_input_mfs=(3,), mftype="trimf", and_operator="min", seed=None
     ):

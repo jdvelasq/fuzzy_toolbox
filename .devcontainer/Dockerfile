@@ -15,7 +15,9 @@ RUN python3 -m pip install \
     isort \
     ipykernel \
     scikit-learn \
-    progressbar2
+    progressbar2 \
+    sphinx \
+    sphinx-rtd-theme
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 # COPY requirements.txt /tmp/pip-tmp/
