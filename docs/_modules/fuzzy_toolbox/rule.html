@@ -1,0 +1,460 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>fuzzy_toolbox.rule &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../variable.html">Fuzzy Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rule.html">Fuzzy Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mamdani.html">Mamdani fuzzy model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugeno.html">Sugeno fuzzy model</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>fuzzy_toolbox.rule</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fuzzy_toolbox.rule</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Fuzzy Rules</span>
+<span class="sd">==============================================================================</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.variable</span> <span class="kn">import</span> <span class="n">FuzzyVariable</span>
+
+
+<div class="viewcode-block" id="FuzzyRule"><a class="viewcode-back" href="../../rule.html#fuzzy_toolbox.rule.FuzzyRule">[docs]</a><span class="k">class</span> <span class="nc">FuzzyRule</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Mamdani fuzzy rule.</span>
+
+<span class="sd">    Creates a Mamdani fuzzy fule.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        antecedents (list of tuples): Fuzzy variables in the rule antecedent.</span>
+<span class="sd">        consequent (tuple): Fuzzy variable in the consequence.</span>
+<span class="sd">        is_and (bool): When True, membership values are combined using the specified AND operator; when False, the OR operator is used.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">antecedents</span><span class="p">,</span>
+        <span class="n">consequent</span><span class="p">,</span>
+        <span class="n">is_and</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">antecedents</span> <span class="o">=</span> <span class="n">antecedents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span> <span class="o">=</span> <span class="n">consequent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_and</span> <span class="o">=</span> <span class="n">is_and</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memberships</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;IF  &quot;</span>
+        <span class="n">space</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">antecedent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">antecedents</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="n">antecedent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; IS&quot;</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">antecedent</span><span class="p">)):</span>
+                    <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">antecedent</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_and</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">text</span> <span class="o">+=</span> <span class="n">space</span> <span class="o">+</span> <span class="s2">&quot;AND &quot;</span> <span class="o">+</span> <span class="n">antecedent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; IS&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">text</span> <span class="o">+=</span> <span class="n">space</span> <span class="o">+</span> <span class="s2">&quot;OR &quot;</span> <span class="o">+</span> <span class="n">antecedent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; IS&quot;</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">antecedent</span><span class="p">)):</span>
+                    <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">antecedent</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;THEN</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="n">space</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_consequent_name</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; IS&quot;</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">)):</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">text</span>
+
+<div class="viewcode-block" id="FuzzyRule.get_consequent_universe"><a class="viewcode-back" href="../../rule.html#fuzzy_toolbox.rule.FuzzyRule.get_consequent_universe">[docs]</a>    <span class="k">def</span> <span class="nf">get_consequent_universe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the universe of the fuzzy variable in the consquent.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">universe</span></div>
+
+<div class="viewcode-block" id="FuzzyRule.get_consequent_membership"><a class="viewcode-back" href="../../rule.html#fuzzy_toolbox.rule.FuzzyRule.get_consequent_membership">[docs]</a>    <span class="k">def</span> <span class="nf">get_consequent_membership</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the membership of the fuzzy variable in the consquent.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span></div>
+
+<div class="viewcode-block" id="FuzzyRule.get_consequent_name"><a class="viewcode-back" href="../../rule.html#fuzzy_toolbox.rule.FuzzyRule.get_consequent_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_consequent_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the name of the fuzzy variable in the consquent.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span></div>
+
+<div class="viewcode-block" id="FuzzyRule.compute_inference"><a class="viewcode-back" href="../../rule.html#fuzzy_toolbox.rule.FuzzyRule.compute_inference">[docs]</a>    <span class="k">def</span> <span class="nf">compute_inference</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">and_operator</span><span class="p">,</span> <span class="n">or_operator</span><span class="p">,</span> <span class="n">implication_operator</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the output fuzzy set of the rule.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            and_operator (string): {&quot;min&quot;|&quot;prod&quot;}</span>
+<span class="sd">            or_operator (string): {&quot;max&quot;|&quot;probor&quot;}</span>
+<span class="sd">            implication_operator (string): {&quot;min&quot;|&quot;prod&quot;}</span>
+<span class="sd">            values (dict): Crisp values for the antecedent variables.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_memberships</span><span class="p">(</span><span class="o">**</span><span class="n">values</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">combine_inputs</span><span class="p">(</span><span class="n">and_operator</span><span class="p">,</span> <span class="n">or_operator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_implication</span><span class="p">(</span><span class="n">implication_operator</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FuzzyRule.compute_memberships"><a class="viewcode-back" href="../../rule.html#fuzzy_toolbox.rule.FuzzyRule.compute_memberships">[docs]</a>    <span class="k">def</span> <span class="nf">compute_memberships</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the memberships of the antecedents</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            values (dictionary): crisp values for the antecedentes in the rule.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memberships</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">antecedent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">antecedents</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">antecedent</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">fuzzyvar</span><span class="p">,</span> <span class="n">fuzzyset</span> <span class="o">=</span> <span class="n">antecedent</span>
+                <span class="n">modifier</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">negation</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">antecedent</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">fuzzyvar</span><span class="p">,</span> <span class="n">modifier</span><span class="p">,</span> <span class="n">fuzzyset</span> <span class="o">=</span> <span class="n">antecedent</span>
+                <span class="k">if</span> <span class="n">modifier</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;NOT&quot;</span><span class="p">:</span>
+                    <span class="n">modifier</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">negation</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">negation</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">antecedent</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">fuzzyvar</span><span class="p">,</span> <span class="n">negation</span><span class="p">,</span> <span class="n">modifier</span><span class="p">,</span> <span class="n">fuzzyset</span> <span class="o">=</span> <span class="n">antecedent</span>
+                <span class="n">negation</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="n">crisp_value</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">fuzzyvar</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">membership</span> <span class="o">=</span> <span class="n">fuzzyvar</span><span class="o">.</span><span class="n">membership</span><span class="p">(</span><span class="n">crisp_value</span><span class="p">,</span> <span class="n">fuzzyset</span><span class="p">,</span> <span class="n">modifier</span><span class="p">,</span> <span class="n">negation</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">memberships</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">membership</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FuzzyRule.combine_inputs"><a class="viewcode-back" href="../../rule.html#fuzzy_toolbox.rule.FuzzyRule.combine_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">combine_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">and_operator</span><span class="p">,</span> <span class="n">or_operator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the firing strength of the rule.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            and_operator (string): {&quot;min&quot;|&quot;prod&quot;}</span>
+<span class="sd">            or_operator (string): {&quot;max&quot;|&quot;probor&quot;}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">memberships</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_and</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">operator</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">,</span>
+                <span class="s2">&quot;prod&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">,</span>
+            <span class="p">}[</span><span class="n">and_operator</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span> <span class="o">=</span> <span class="n">operator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">memberships</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">memberships</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_and</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">or_operator</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">memberships</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="n">or_operator</span> <span class="o">==</span> <span class="s2">&quot;probor&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memberships</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">memberships</span><span class="p">)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span>
+                        <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">memberships</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">memberships</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memberships</span></div>
+
+<div class="viewcode-block" id="FuzzyRule.compute_implication"><a class="viewcode-back" href="../../rule.html#fuzzy_toolbox.rule.FuzzyRule.compute_implication">[docs]</a>    <span class="k">def</span> <span class="nf">compute_implication</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">implication_operator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the implication of the rule.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            implication_operator (string): {&quot;min&quot;|&quot;prod&quot;}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">modifier</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">negation</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">modifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">modifier</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;NOT&quot;</span><span class="p">:</span>
+                <span class="n">modifier</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">negation</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">negation</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">modifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">negation</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">fuzzyset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">membership</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_modified_membership</span><span class="p">(</span>
+            <span class="n">fuzzyset</span><span class="p">,</span> <span class="n">modifier</span><span class="p">,</span> <span class="n">negation</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">implication_operator</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+            <span class="n">membership</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">membership</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span><span class="p">,</span>
+                <span class="n">membership</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">implication_operator</span> <span class="o">==</span> <span class="s2">&quot;prod&quot;</span><span class="p">:</span>
+            <span class="n">membership</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span><span class="p">)</span> <span class="o">*</span> <span class="n">membership</span>
+
+        <span class="n">membership</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">membership</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="n">FuzzyVariable</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Implication&quot;</span><span class="p">,</span>
+            <span class="n">universe</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_consequent_universe</span><span class="p">(),</span>
+            <span class="n">sets</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rule_output&quot;</span><span class="p">:</span> <span class="n">membership</span><span class="p">},</span>
+        <span class="p">)</span></div></div>
+
+
+<span class="c1"># score = FuzzyVariable(</span>
+<span class="c1">#     name=&quot;score&quot;,</span>
+<span class="c1">#     universe=np.arange(start=150, stop=201, step=5),</span>
+<span class="c1">#     sets={</span>
+<span class="c1">#         &quot;High&quot;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.7, 1.0, 1.0, 1.0],</span>
+<span class="c1">#         &quot;Low&quot;: [1.0, 1.0, 0.8, 0.5, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],</span>
+<span class="c1">#     },</span>
+<span class="c1"># )</span>
+
+<span class="c1"># ratio = FuzzyVariable(</span>
+<span class="c1">#     name=&quot;ratio&quot;,</span>
+<span class="c1">#     universe=[0.1, 0.3, 0.40, 0.41, 0.42, 0.43, 0.44, 0.45, 0.5, 0.7, 1.0],</span>
+<span class="c1">#     sets={</span>
+<span class="c1">#         &quot;Goodr&quot;: [1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0, 0],</span>
+<span class="c1">#         &quot;Badr&quot;: [0, 0, 0, 0, 0, 0, 0, 0.3, 0.7, 1.0, 1.0],</span>
+<span class="c1">#     },</span>
+<span class="c1"># )</span>
+
+<span class="c1"># credit = FuzzyVariable(</span>
+<span class="c1">#     name=&quot;credit&quot;,</span>
+<span class="c1">#     universe=list(range(11)),</span>
+<span class="c1">#     sets={</span>
+<span class="c1">#         &quot;Goodc&quot;: [1, 1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0],</span>
+<span class="c1">#         &quot;Badc&quot;: [0, 0, 0, 0, 0, 0, 0.3, 0.7, 1, 1, 1],</span>
+<span class="c1">#     },</span>
+<span class="c1"># )</span>
+
+<span class="c1"># decision = FuzzyVariable(</span>
+<span class="c1">#     name=&quot;decision&quot;,</span>
+<span class="c1">#     universe=list(range(11)),</span>
+<span class="c1">#     sets={</span>
+<span class="c1">#         &quot;Approve&quot;: [0, 0, 0, 0, 0, 0, 0.3, 0.7, 1, 1, 1],</span>
+<span class="c1">#         &quot;Reject&quot;: [1, 1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0],</span>
+<span class="c1">#     },</span>
+<span class="c1"># )</span>
+
+<span class="c1"># rule_1 = FuzzyRule(</span>
+<span class="c1">#     antecedents=[</span>
+<span class="c1">#         (score, &quot;High&quot;),</span>
+<span class="c1">#         (ratio, &quot;Goodr&quot;),</span>
+<span class="c1">#         (credit, &quot;Goodc&quot;),</span>
+<span class="c1">#     ],</span>
+<span class="c1">#     consequent=(decision, &quot;Approve&quot;),</span>
+<span class="c1"># )</span>
+
+<span class="c1"># print(rule_1)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
