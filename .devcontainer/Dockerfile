@@ -13,7 +13,9 @@ RUN python3 -m pip install \
     numpy \
     matplotlib \
     isort \
-    ipykernel
+    ipykernel \
+    scikit-learn \
+    progressbar2
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 # COPY requirements.txt /tmp/pip-tmp/
