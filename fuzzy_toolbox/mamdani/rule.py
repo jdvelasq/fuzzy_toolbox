@@ -6,7 +6,7 @@ Fuzzy Rules
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .variable import FuzzyVariable
+from variable import FuzzyVariable
 
 
 class FuzzyRule:
@@ -185,12 +185,12 @@ class FuzzyRule:
 
     def plot(
         self,
-        n_rows=1,
-        i_row=1,
         and_operator="prod",
         or_operator="max",
         implication_operator="prod",
         n_antecedents=None,
+        n_rows=1,
+        i_row=0,
         **values
     ):
         def format_plot(title):
@@ -270,52 +270,52 @@ class FuzzyRule:
         plt.gca().yaxis.tick_right()
 
 
-# score = FuzzyVariable(
-#     name="score",
-#     universe=np.arange(start=150, stop=201, step=5),
-#     sets={
-#         "High": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.7, 1.0, 1.0, 1.0],
-#         "Low": [1.0, 1.0, 0.8, 0.5, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-#     },
-# )
+score = FuzzyVariable(
+    name="score",
+    universe=np.arange(start=150, stop=201, step=5),
+    sets={
+        "High": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.7, 1.0, 1.0, 1.0],
+        "Low": [1.0, 1.0, 0.8, 0.5, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    },
+)
 
-# ratio = FuzzyVariable(
-#     name="ratio",
-#     universe=[0.1, 0.3, 0.40, 0.41, 0.42, 0.43, 0.44, 0.45, 0.5, 0.7, 1.0],
-#     sets={
-#         "Goodr": [1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0, 0],
-#         "Badr": [0, 0, 0, 0, 0, 0, 0, 0.3, 0.7, 1.0, 1.0],
-#     },
-# )
+ratio = FuzzyVariable(
+    name="ratio",
+    universe=[0.1, 0.3, 0.40, 0.41, 0.42, 0.43, 0.44, 0.45, 0.5, 0.7, 1.0],
+    sets={
+        "Goodr": [1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0, 0],
+        "Badr": [0, 0, 0, 0, 0, 0, 0, 0.3, 0.7, 1.0, 1.0],
+    },
+)
 
-# credit = FuzzyVariable(
-#     name="credit",
-#     universe=list(range(11)),
-#     sets={
-#         "Goodc": [1, 1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0],
-#         "Badc": [0, 0, 0, 0, 0, 0, 0.3, 0.7, 1, 1, 1],
-#     },
-# )
+credit = FuzzyVariable(
+    name="credit",
+    universe=list(range(11)),
+    sets={
+        "Goodc": [1, 1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0],
+        "Badc": [0, 0, 0, 0, 0, 0, 0.3, 0.7, 1, 1, 1],
+    },
+)
 
-# decision = FuzzyVariable(
-#     name="decision",
-#     universe=list(range(11)),
-#     sets={
-#         "Approve": [0, 0, 0, 0, 0, 0, 0.3, 0.7, 1, 1, 1],
-#         "Reject": [1, 1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0],
-#     },
-# )
+decision = FuzzyVariable(
+    name="decision",
+    universe=list(range(11)),
+    sets={
+        "Approve": [0, 0, 0, 0, 0, 0, 0.3, 0.7, 1, 1, 1],
+        "Reject": [1, 1, 1, 0.7, 0.3, 0, 0, 0, 0, 0, 0],
+    },
+)
 
-# rule_1 = FuzzyRule(
-#     antecedents=[
-#         (score, "High"),
-#         (ratio, "Goodr"),
-#         (credit, "Goodc"),
-#     ],
-#     consequent=(decision, "Approve"),
-# )
+rule_1 = FuzzyRule(
+    antecedents=[
+        (score, "High"),
+        (ratio, "Goodr"),
+        (credit, "Goodc"),
+    ],
+    consequent=(decision, "Approve"),
+)
 
-# plt.figure(figsize=(12, 3))
-# rule_1.plot(score=180, ratio=0.25, credit=3)
+plt.figure(figsize=(12, 3))
+rule_1.plot(score=180, ratio=0.25, credit=3)
 
 # print(rule_1)
