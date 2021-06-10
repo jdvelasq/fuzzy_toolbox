@@ -6,7 +6,7 @@ Fuzzy Rules
 import matplotlib.pyplot as plt
 import numpy as np
 
-from variable import FuzzyVariable
+from .variable import FuzzyVariable
 
 
 class FuzzyRule:
