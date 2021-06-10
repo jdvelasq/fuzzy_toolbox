@@ -3,7 +3,7 @@ Fuzzy Rules
 ==============================================================================
 
 """
-
+import matplotlib.pyplot as plt
 import numpy as np
 
 from .variable import FuzzyVariable
@@ -33,6 +33,7 @@ class FuzzyRule:
         self.memberships = None
         self.combined_input = None
         self.output = None
+        self.memberships = None
 
     def __repr__(self):
         text = "IF  "
@@ -89,10 +90,10 @@ class FuzzyRule:
         self.compute_implication(implication_operator)
 
     def compute_memberships(self, **values):
-        """Computes the memberships of the antecedents
+        """Computes the memberships of the antecedents.
 
         Args:
-            values (dictionary): crisp values for the antecedentes in the rule.
+            values: crisp values for the antecedentes in the rule.
         """
         self.memberships = []
 
@@ -100,23 +101,14 @@ class FuzzyRule:
 
             if len(antecedent) == 2:
                 fuzzyvar, fuzzyset = antecedent
-                modifier = None
-                negation = False
-
-            if len(antecedent) == 3:
-                fuzzyvar, modifier, fuzzyset = antecedent
-                if modifier.upper() == "NOT":
-                    modifier = None
-                    negation = True
-                else:
-                    negation = False
-
-            if len(antecedent) == 4:
-                fuzzyvar, negation, modifier, fuzzyset = antecedent
-                negation = True
+                modifiers = None
+            else:
+                fuzzyvar = antecedent[0]
+                fuzzyset = antecedent[-1]
+                modifiers = antecedent[1:-1]
 
             crisp_value = values[fuzzyvar.name]
-            membership = fuzzyvar.membership(crisp_value, fuzzyset, modifier, negation)
+            membership = fuzzyvar.compute_membership(crisp_value, fuzzyset, modifiers)
             self.memberships.append(membership)
 
     def combine_inputs(self, and_operator, or_operator):
@@ -165,25 +157,13 @@ class FuzzyRule:
         """
 
         if len(self.consequent) == 2:
-            modifier = None
-            negation = False
-
-        if len(self.consequent) == 3:
-            modifier = self.consequent[1]
-            if modifier.upper() == "NOT":
-                modifier = None
-                negation = True
-            else:
-                negation = False
-
-        if len(self.consequent) == 4:
-            modifier = self.consequent[2]
-            negation = True
+            modifiers = None
+        else:
+            modifiers = self.consequent[1:-1]
 
         fuzzyset = self.consequent[-1]
-        membership = self.consequent[0].get_modified_membership(
-            fuzzyset, modifier, negation
-        )
+        membership = self.consequent[0].get_modified_membership(fuzzyset, modifiers)
+        self.output_membership = membership
 
         if implication_operator == "min":
             membership = np.where(
@@ -202,6 +182,92 @@ class FuzzyRule:
             universe=self.get_consequent_universe(),
             sets={"rule_output": membership},
         )
+
+    def plot(
+        self,
+        n_rows=1,
+        i_row=1,
+        and_operator="prod",
+        or_operator="max",
+        implication_operator="prod",
+        n_antecedents=None,
+        **values
+    ):
+        def format_plot(title):
+            plt.gca().set_ylim(-0.05, 1.05)
+            plt.gca().spines["left"].set_visible(False)
+            plt.gca().spines["bottom"].set_visible(True)
+            plt.gca().spines["top"].set_visible(False)
+            plt.gca().spines["right"].set_visible(False)
+            plt.gca().get_yaxis().set_visible(False)
+            plt.gca().get_xaxis().set_visible(True)
+
+            if title is not None:
+                plt.gca().set_title(title)
+
+        if n_antecedents is None:
+            n_antecedents = len(self.antecedents)
+
+        self.compute_inference(
+            and_operator=and_operator,
+            or_operator=or_operator,
+            implication_operator=implication_operator,
+            **values,
+        )
+
+        universes = {
+            antecedent[0].name: antecedent[0].universe
+            for antecedent in self.antecedents
+        }
+        self.compute_memberships(**universes)
+
+        for i, antecedent in enumerate(self.antecedents):
+
+            value = values[antecedent[0].name]
+
+            plt.subplot(n_rows, n_antecedents + 1, i_row * (n_antecedents + 1) + i + 1)
+            plt.gca().plot(
+                antecedent[0].universe, self.memberships[i], "-k", linewidth=1
+            )
+            membership = np.interp(
+                x=values[antecedent[0].name],
+                xp=universes[antecedent[0].name],
+                fp=self.memberships[i],
+            )
+            membership = np.where(
+                self.memberships[i] <= membership, self.memberships[i], membership
+            )
+            plt.gca().fill_between(
+                antecedent[0].universe, membership, color="gray", alpha=0.7
+            )
+
+            format_plot(
+                title="{} = {}".format(antecedent[0].name, value),
+            )
+
+            plt.gca().vlines(x=value, ymin=-0.0, ymax=1.0, color="red", linewidth=2)
+            if i == 0:
+                plt.gca().get_yaxis().set_visible(True)
+
+        plt.subplot(
+            n_rows, n_antecedents + 1, i_row * (n_antecedents + 1) + n_antecedents + 1
+        )
+        plt.gca().plot(self.output.universe, self.output_membership, "-", color="gray")
+
+        plt.gca().plot(
+            self.output.universe, self.output["rule_output"], "-k", linewidth=2
+        )
+        plt.gca().fill_between(
+            self.output.universe,
+            self.output["rule_output"],
+            color="gray",
+            alpha=0.7,
+        )
+
+        format_plot(title=self.consequent[0].name)
+
+        plt.gca().get_yaxis().set_visible(True)
+        plt.gca().yaxis.tick_right()
 
 
 # score = FuzzyVariable(
@@ -248,5 +314,8 @@ class FuzzyRule:
 #     ],
 #     consequent=(decision, "Approve"),
 # )
+
+# plt.figure(figsize=(12, 3))
+# rule_1.plot(score=180, ratio=0.25, credit=3)
 
 # print(rule_1)

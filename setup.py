@@ -19,7 +19,9 @@ setup(
         "progressbar2",
     ],
     packages=[
-        "pyfuzzy",
+        "fuzzy_toolbox",
+        "fuzzy_toolbox.mamdani",
+        "fuzzy_toolbox.sugeno",
     ],
     package_dir={"fuzzy_toolbox": "pyfuzzy_toolbox"},
     include_package_data=True,
