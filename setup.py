@@ -7,7 +7,7 @@ setup(
     author="Juan D. Velasquez",
     author_email="jdvelasq@unal.edu.co",
     license="MIT",
-    url="http://github.com/jdvelasq/fuzzy-toolbox",
+    url="http://github.com/jdvelasq/fuzzy_toolbox",
     description="Fuzzy Toolbox",
     long_description="Fuzzy Inference Systems Toolbox",
     keywords="fuzzy",
@@ -23,7 +23,7 @@ setup(
         "fuzzy_toolbox.mamdani",
         "fuzzy_toolbox.sugeno",
     ],
-    package_dir={"fuzzy_toolbox": "pyfuzzy_toolbox"},
+    package_dir={"fuzzy_toolbox": "fuzzy_toolbox"},
     include_package_data=True,
     classifiers=[
         "Development Status :: 3 - Alpha",
