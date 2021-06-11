@@ -1,4 +1,4 @@
-.. automodule:: fuzzy_toolbox.sugeno
+.. automodule:: fuzzy_toolbox.sugeno.sugeno
     :members:
     :undoc-members:
     :show-inheritance:

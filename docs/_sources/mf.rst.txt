@@ -1,4 +1,4 @@
-.. automodule:: fuzzy_toolbox.mamdani.mamdani
+.. automodule:: fuzzy_toolbox.mamdani.mf
     :members:
     :undoc-members:
     :show-inheritance:

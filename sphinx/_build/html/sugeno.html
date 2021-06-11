@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Sugeno fuzzy model &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.0.0 documentation</title>
+  <title>Sugeno fuzzy model &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.1.0 documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.0.0
+                0.1.0
               </div>
             
           
@@ -91,6 +91,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="mf.html">Membership Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="variable.html">Fuzzy Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rule.html">Fuzzy Rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mamdani.html">Mamdani fuzzy model</a></li>
@@ -162,11 +163,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-fuzzy_toolbox.sugeno"></span><div class="section" id="sugeno-fuzzy-model">
+  <span class="target" id="module-fuzzy_toolbox.sugeno.sugeno"></span><div class="section" id="sugeno-fuzzy-model">
 <h1>Sugeno fuzzy model<a class="headerlink" href="#sugeno-fuzzy-model" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.sugeno.</span></span><span class="sig-name descname"><span class="pre">Sugeno</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_input_mfs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mftype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'trimf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">and_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.sugeno.Sugeno">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.sugeno.sugeno.</span></span><span class="sig-name descname"><span class="pre">Sugeno</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_input_mfs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mftype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'trimf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">and_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno/sugeno.html#Sugeno"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.sugeno.Sugeno" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Creates a Sugeno inference system.</p>
 <dl class="field-list simple">
@@ -180,103 +181,39 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.compute_consequents">
-<span class="sig-name descname"><span class="pre">compute_consequents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.compute_consequents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.compute_consequents" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.sugeno.Sugeno.compute_consequences">
+<span class="sig-name descname"><span class="pre">compute_consequences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_consequences</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno/sugeno.html#Sugeno.compute_consequences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.sugeno.Sugeno.compute_consequences" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.compute_lstsq">
-<span class="sig-name descname"><span class="pre">compute_lstsq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.compute_lstsq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.compute_lstsq" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.sugeno.Sugeno.compute_memberships_by_rule_per_var">
+<span class="sig-name descname"><span class="pre">compute_memberships_by_rule_per_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_premises</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno/sugeno.html#Sugeno.compute_memberships_by_rule_per_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.sugeno.Sugeno.compute_memberships_by_rule_per_var" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var">
-<span class="sig-name descname"><span class="pre">compute_memberships_by_rule_per_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.compute_memberships_by_rule_per_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.sugeno.Sugeno.compute_normalized_firing_strenghts">
+<span class="sig-name descname"><span class="pre">compute_normalized_firing_strenghts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno/sugeno.html#Sugeno.compute_normalized_firing_strenghts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.sugeno.Sugeno.compute_normalized_firing_strenghts" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var_gaussmf">
-<span class="sig-name descname"><span class="pre">compute_memberships_by_rule_per_var_gaussmf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.compute_memberships_by_rule_per_var_gaussmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var_gaussmf" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.sugeno.Sugeno.compute_weighted_output">
+<span class="sig-name descname"><span class="pre">compute_weighted_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno/sugeno.html#Sugeno.compute_weighted_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.sugeno.Sugeno.compute_weighted_output" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var_gbellmf">
-<span class="sig-name descname"><span class="pre">compute_memberships_by_rule_per_var_gbellmf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.compute_memberships_by_rule_per_var_gbellmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var_gbellmf" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.sugeno.Sugeno.create_internal_structure">
+<span class="sig-name descname"><span class="pre">create_internal_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_premises</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequences</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno/sugeno.html#Sugeno.create_internal_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.sugeno.Sugeno.create_internal_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the internal structure of the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.sugeno.Sugeno.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_premises</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequences</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'constant'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warm_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno/sugeno.html#Sugeno.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.sugeno.Sugeno.fit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var_trimf">
-<span class="sig-name descname"><span class="pre">compute_memberships_by_rule_per_var_trimf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.compute_memberships_by_rule_per_var_trimf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.compute_memberships_by_rule_per_var_trimf" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.compute_normalized_rule_weights">
-<span class="sig-name descname"><span class="pre">compute_normalized_rule_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.compute_normalized_rule_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.compute_normalized_rule_weights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.compute_weighted_output">
-<span class="sig-name descname"><span class="pre">compute_weighted_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.compute_weighted_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.compute_weighted_output" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.create_antecedents">
-<span class="sig-name descname"><span class="pre">create_antecedents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_antecedents</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.create_antecedents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.create_antecedents" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.create_consequents">
-<span class="sig-name descname"><span class="pre">create_consequents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_consequents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.create_consequents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.create_consequents" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.create_rules">
-<span class="sig-name descname"><span class="pre">create_rules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.create_rules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.create_rules" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.create_structure">
-<span class="sig-name descname"><span class="pre">create_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.create_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.create_structure" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.improve_coefs">
-<span class="sig-name descname"><span class="pre">improve_coefs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.improve_coefs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.improve_coefs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets">
-<span class="sig-name descname"><span class="pre">improve_fuzzysets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.improve_fuzzysets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets_centers">
-<span class="sig-name descname"><span class="pre">improve_fuzzysets_centers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.improve_fuzzysets_centers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets_centers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets_exponents">
-<span class="sig-name descname"><span class="pre">improve_fuzzysets_exponents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.improve_fuzzysets_exponents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets_exponents" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets_sigmas">
-<span class="sig-name descname"><span class="pre">improve_fuzzysets_sigmas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.improve_fuzzysets_sigmas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.improve_fuzzysets_sigmas" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.improve_intercepts">
-<span class="sig-name descname"><span class="pre">improve_intercepts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_consequents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.improve_intercepts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.improve_intercepts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.Sugeno.plot_fuzzysets">
-<span class="sig-name descname"><span class="pre">plot_fuzzysets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i_var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(8,</span> <span class="pre">3)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno.html#Sugeno.plot_fuzzysets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.Sugeno.plot_fuzzysets" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.sugeno.sugeno.Sugeno.plot_fuzzysets">
+<span class="sig-name descname"><span class="pre">plot_fuzzysets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i_var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/sugeno/sugeno.html#Sugeno.plot_fuzzysets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.sugeno.sugeno.Sugeno.plot_fuzzysets" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

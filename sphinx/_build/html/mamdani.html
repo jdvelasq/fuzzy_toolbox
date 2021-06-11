@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Mamdani fuzzy model &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.0.0 documentation</title>
+  <title>Mamdani fuzzy model &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.1.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.0.0
+                0.1.0
               </div>
             
           
@@ -92,6 +92,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="mf.html">Membership Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="variable.html">Fuzzy Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rule.html">Fuzzy Rules</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Mamdani fuzzy model</a></li>
@@ -163,11 +164,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-fuzzy_toolbox.mamdani"></span><div class="section" id="mamdani-fuzzy-model">
+  <span class="target" id="module-fuzzy_toolbox.mamdani.mamdani"></span><div class="section" id="mamdani-fuzzy-model">
 <h1>Mamdani fuzzy model<a class="headerlink" href="#mamdani-fuzzy-model" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.Mamdani">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.mamdani.</span></span><span class="sig-name descname"><span class="pre">Mamdani</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">and_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">or_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implication_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregation_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defuzzification_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cog'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani.html#Mamdani"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.Mamdani" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.mamdani.Mamdani">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.mamdani.mamdani.</span></span><span class="sig-name descname"><span class="pre">Mamdani</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">and_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">or_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implication_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregation_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defuzzification_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cog'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/mamdani.html#Mamdani"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.mamdani.Mamdani" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Crates a Mamdani inference system.</p>
 <dl class="field-list simple">
@@ -183,22 +184,27 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.Mamdani.compute_aggregation">
-<span class="sig-name descname"><span class="pre">compute_aggregation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani.html#Mamdani.compute_aggregation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.Mamdani.compute_aggregation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.mamdani.Mamdani.compute_aggregation">
+<span class="sig-name descname"><span class="pre">compute_aggregation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/mamdani.html#Mamdani.compute_aggregation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.mamdani.Mamdani.compute_aggregation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the output fuzzy set of the inference system.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.Mamdani.compute_defuzzification">
-<span class="sig-name descname"><span class="pre">compute_defuzzification</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani.html#Mamdani.compute_defuzzification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.Mamdani.compute_defuzzification" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.mamdani.Mamdani.compute_defuzzification">
+<span class="sig-name descname"><span class="pre">compute_defuzzification</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/mamdani.html#Mamdani.compute_defuzzification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.mamdani.Mamdani.compute_defuzzification" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the equivalent crisp value representing the output fuzzy set of the system.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.Mamdani.compute_rules">
-<span class="sig-name descname"><span class="pre">compute_rules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani.html#Mamdani.compute_rules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.Mamdani.compute_rules" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.mamdani.Mamdani.compute_rules">
+<span class="sig-name descname"><span class="pre">compute_rules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/mamdani.html#Mamdani.compute_rules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.mamdani.Mamdani.compute_rules" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the output fuzzy set of each rule.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.mamdani.Mamdani.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/mamdani.html#Mamdani.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.mamdani.Mamdani.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

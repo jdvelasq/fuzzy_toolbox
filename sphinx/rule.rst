@@ -1,4 +1,4 @@
-.. automodule:: fuzzy_toolbox.rule
+.. automodule:: fuzzy_toolbox.mamdani.rule
     :members:
     :undoc-members:
     :show-inheritance:

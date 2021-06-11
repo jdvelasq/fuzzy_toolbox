@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Fuzzy Rules &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.0.0 documentation</title>
+  <title>Fuzzy Rules &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.1.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.0.0
+                0.1.0
               </div>
             
           
@@ -92,6 +92,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="mf.html">Membership Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="variable.html">Fuzzy Variables</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fuzzy Rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mamdani.html">Mamdani fuzzy model</a></li>
@@ -163,11 +164,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-fuzzy_toolbox.rule"></span><div class="section" id="fuzzy-rules">
+  <span class="target" id="module-fuzzy_toolbox.mamdani.rule"></span><div class="section" id="fuzzy-rules">
 <h1>Fuzzy Rules<a class="headerlink" href="#fuzzy-rules" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="fuzzy_toolbox.rule.FuzzyRule">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.rule.</span></span><span class="sig-name descname"><span class="pre">FuzzyRule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consequent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_and</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/rule.html#FuzzyRule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.rule.FuzzyRule" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.rule.FuzzyRule">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.mamdani.rule.</span></span><span class="sig-name descname"><span class="pre">FuzzyRule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">antecedents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consequent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_and</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/rule.html#FuzzyRule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.rule.FuzzyRule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Mamdani fuzzy rule.</p>
 <p>Creates a Mamdani fuzzy fule.</p>
@@ -181,8 +182,8 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.rule.FuzzyRule.combine_inputs">
-<span class="sig-name descname"><span class="pre">combine_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">and_operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">or_operator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/rule.html#FuzzyRule.combine_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.rule.FuzzyRule.combine_inputs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.rule.FuzzyRule.combine_inputs">
+<span class="sig-name descname"><span class="pre">combine_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">and_operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">or_operator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/rule.html#FuzzyRule.combine_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.rule.FuzzyRule.combine_inputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the firing strength of the rule.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -195,8 +196,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.rule.FuzzyRule.compute_implication">
-<span class="sig-name descname"><span class="pre">compute_implication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">implication_operator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/rule.html#FuzzyRule.compute_implication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.rule.FuzzyRule.compute_implication" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.rule.FuzzyRule.compute_implication">
+<span class="sig-name descname"><span class="pre">compute_implication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">implication_operator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/rule.html#FuzzyRule.compute_implication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.rule.FuzzyRule.compute_implication" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the implication of the rule.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -206,8 +207,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.rule.FuzzyRule.compute_inference">
-<span class="sig-name descname"><span class="pre">compute_inference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">and_operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">or_operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implication_operator</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/rule.html#FuzzyRule.compute_inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.rule.FuzzyRule.compute_inference" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.rule.FuzzyRule.compute_inference">
+<span class="sig-name descname"><span class="pre">compute_inference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">and_operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">or_operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implication_operator</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/rule.html#FuzzyRule.compute_inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.rule.FuzzyRule.compute_inference" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the output fuzzy set of the rule.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -222,33 +223,38 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.rule.FuzzyRule.compute_memberships">
-<span class="sig-name descname"><span class="pre">compute_memberships</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/rule.html#FuzzyRule.compute_memberships"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.rule.FuzzyRule.compute_memberships" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the memberships of the antecedents</p>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.rule.FuzzyRule.compute_memberships">
+<span class="sig-name descname"><span class="pre">compute_memberships</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/rule.html#FuzzyRule.compute_memberships"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.rule.FuzzyRule.compute_memberships" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the memberships of the antecedents.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>values</strong> (<em>dictionary</em>) – crisp values for the antecedentes in the rule.</p>
+<dd class="field-odd"><p><strong>values</strong> – crisp values for the antecedentes in the rule.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.rule.FuzzyRule.get_consequent_membership">
-<span class="sig-name descname"><span class="pre">get_consequent_membership</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/rule.html#FuzzyRule.get_consequent_membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.rule.FuzzyRule.get_consequent_membership" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.rule.FuzzyRule.get_consequent_membership">
+<span class="sig-name descname"><span class="pre">get_consequent_membership</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/rule.html#FuzzyRule.get_consequent_membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.rule.FuzzyRule.get_consequent_membership" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the membership of the fuzzy variable in the consquent.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.rule.FuzzyRule.get_consequent_name">
-<span class="sig-name descname"><span class="pre">get_consequent_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/rule.html#FuzzyRule.get_consequent_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.rule.FuzzyRule.get_consequent_name" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.rule.FuzzyRule.get_consequent_name">
+<span class="sig-name descname"><span class="pre">get_consequent_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/rule.html#FuzzyRule.get_consequent_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.rule.FuzzyRule.get_consequent_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the name of the fuzzy variable in the consquent.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.rule.FuzzyRule.get_consequent_universe">
-<span class="sig-name descname"><span class="pre">get_consequent_universe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/rule.html#FuzzyRule.get_consequent_universe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.rule.FuzzyRule.get_consequent_universe" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.rule.FuzzyRule.get_consequent_universe">
+<span class="sig-name descname"><span class="pre">get_consequent_universe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/rule.html#FuzzyRule.get_consequent_universe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.rule.FuzzyRule.get_consequent_universe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the universe of the fuzzy variable in the consquent.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.rule.FuzzyRule.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">and_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prod'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">or_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implication_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prod'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_antecedents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/rule.html#FuzzyRule.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.rule.FuzzyRule.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

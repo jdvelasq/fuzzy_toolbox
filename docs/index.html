@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Getting Started &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.0.0 documentation</title>
+  <title>Getting Started &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.1.0 documentation</title>
   
 
   
@@ -41,7 +41,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Fuzzy Variables" href="variable.html" /> 
+    <link rel="next" title="Membership Functions" href="mf.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.0.0
+                0.1.0
               </div>
             
           
@@ -91,6 +91,7 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="mf.html">Membership Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="variable.html">Fuzzy Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rule.html">Fuzzy Rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mamdani.html">Mamdani fuzzy model</a></li>
@@ -162,47 +163,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <p><em>Fuzzy-Toolbox</em> is a package for mining relevant information about topics related to Research and
-Development (R&amp;D) literature extracted from bibliographical databases as Scopus. <em>TechMiner</em>
-facilitates studies of systematic mapping of literature and Tech mining studies. The package can
-be used by users with basic knowledge of Python programming. However, users with advanced
-knowledge in programming and text mining can easily incorporate their codes to maximize the power
-of the library and develop advanced analysis. The package can be used to:</p>
+  <p># Fuzzy-Toolbox: Fuzzy Inference Systems in Python</p>
+<p><em>Fuzzy-Toolbox</em> is a package for building fuzzy inference systems in Python, including:</p>
 <ul class="simple">
-<li><p>Realize analyzes based on document-by-term pattern, for example, number of documents by author, by source or by keyword.</p></li>
-<li><p>Calculate and plot the number of documents or citations by year.</p></li>
-<li><p>Realize analyzes based on term-by-term pattern, for example, number of documents by keywords and by author, by keyword and by year and so on.</p></li>
-<li><p>Compute and plot co-ocurrence, correlation and autocorrelation matrices.</p></li>
-<li><p>Realize Principal Component Analysis to detect and analyze clusters of data.</p></li>
-<li><p>Plot heatmaps, networks and many other types of plots for analyzing data.</p></li>
+<li><p>Mamdani inferece systems.</p></li>
+<li><p>Sugeno models.</p></li>
 </ul>
-<p><em>TechMiner</em> is an open source (distributed under the MIT license) and friendly-user
-package developed and tested in Python version 3.6.</p>
-<p><em>TechMiner</em> runs on top of Jupyter Lab and Google Colaboratory with its own
-graphical user interfase. This feature allows to new user to run <em>TechMiner</em>
-easily. This is particulary benefical because of the large number of analysis
-functions that the tool has. Due to the design of the package, it is easy
-to use techMiner with the tools available in the ecosystem
-of open source tools.</p>
 <div class="section" id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <p>The current stable version can be installed from the command line using:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install fuzzy-toolbox
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install fuzzy_toolbox
 </pre></div>
 </div>
 <p>The current development version can be installed by clonning the GitHub repo
-<a class="reference external" href="https://github.com/jdvelasq/fuzzy-toolbox">https://github.com/jdvelasq/fuzzy-toolbox</a> and executing</p>
+<a class="reference external" href="https://github.com/jdvelasq/fuzzy_toolbox">https://github.com/jdvelasq/fuzzy_toolbox</a> and executing</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python3 setup.py install develop
 </pre></div>
 </div>
 <p>at the command prompt.</p>
-<p>To run the <em>TechMiner</em> GUI, the user must execute</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">techminer.app</span> <span class="kn">import</span> <span class="n">App</span>
-
-<span class="n">App</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>in a cell of Jupiter Lab or Google Colaboratory.</p>
 </div>
 <div class="section" id="release-information">
 <h1>Release Information<a class="headerlink" href="#release-information" title="Permalink to this headline">¶</a></h1>
@@ -223,17 +201,17 @@ of open source tools.</p>
 </li>
 <li><p><strong>Binary Installers:</strong></p>
 <blockquote>
-<div><p><a class="reference external" href="https://pypi.org/project/fuzzy-toolbox">https://pypi.org/project/fuzzy-toolbox</a></p>
+<div><p><a class="reference external" href="https://pypi.org/project/fuzzy_toolbox">https://pypi.org/project/fuzzy_toolbox</a></p>
 </div></blockquote>
 </li>
 <li><p><strong>Source Repository</strong>:</p>
 <blockquote>
-<div><p><a class="reference external" href="https://github.com/jdvelasq/fuzzy-toolbox">https://github.com/jdvelasq/fuzzy-toolbox</a></p>
+<div><p><a class="reference external" href="https://github.com/jdvelasq/fuzzy_toolbox">https://github.com/jdvelasq/fuzzy_toolbox</a></p>
 </div></blockquote>
 </li>
 <li><p><strong>Documentation</strong>:</p>
 <blockquote>
-<div><p><a class="reference external" href="https://jdvelasq.github.io/fuzzy-toolbox/">https://jdvelasq.github.io/fuzzy-toolbox/</a></p>
+<div><p><a class="reference external" href="https://jdvelasq.github.io/fuzzy_toolbox/">https://jdvelasq.github.io/fuzzy_toolbox/</a></p>
 </div></blockquote>
 </li>
 </ul>
@@ -242,6 +220,7 @@ of open source tools.</p>
 <h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="mf.html">Membership Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="variable.html">Fuzzy Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rule.html">Fuzzy Rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mamdani.html">Mamdani fuzzy model</a></li>
@@ -280,7 +259,7 @@ SOFTWARE.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="variable.html" class="btn btn-neutral float-right" title="Fuzzy Variables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="mf.html" class="btn btn-neutral float-right" title="Membership Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

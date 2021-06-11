@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Fuzzy Variables &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.0.0 documentation</title>
+  <title>Fuzzy Variables &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.1.0 documentation</title>
   
 
   
@@ -42,7 +42,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fuzzy Rules" href="rule.html" />
-    <link rel="prev" title="Getting Started" href="index.html" /> 
+    <link rel="prev" title="Membership Functions" href="mf.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.0.0
+                0.1.0
               </div>
             
           
@@ -92,6 +92,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="mf.html">Membership Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fuzzy Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rule.html">Fuzzy Rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mamdani.html">Mamdani fuzzy model</a></li>
@@ -163,19 +164,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-fuzzy_toolbox.variable"></span><div class="section" id="fuzzy-variables">
+  <span class="target" id="module-fuzzy_toolbox.mamdani.variable"></span><div class="section" id="fuzzy-variables">
 <h1>Fuzzy Variables<a class="headerlink" href="#fuzzy-variables" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.FuzzyVariable">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.variable.</span></span><span class="sig-name descname"><span class="pre">FuzzyVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">universe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#FuzzyVariable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.FuzzyVariable" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.variable.FuzzyVariable">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.mamdani.variable.</span></span><span class="sig-name descname"><span class="pre">FuzzyVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">universe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/variable.html#FuzzyVariable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.variable.FuzzyVariable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Creates a linguistic variable.</p>
+<p>Creates a (fuzzy) linguistic variable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>string</em>) – variable name.</p></li>
 <li><p><strong>universe</strong> (<em>list</em><em>, </em><em>numpy.array</em>) – list of points defining the universe of the variable.</p></li>
-<li><p><strong>sets</strong> (<em>dict</em>) – dictioary where keys are the name of the sets, and the values correspond to the membership for each point of the universe.</p></li>
+<li><p><strong>sets</strong> (<em>dict</em>) – dictionary where keys are the name of the sets, and the values correspond to the membership for each point of the universe.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -183,22 +184,41 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.FuzzyVariable.aggregate">
-<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#FuzzyVariable.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.FuzzyVariable.aggregate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transforms the fuzzy sets to a unique fuzzy set computed by the aggregation operator.</p>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.variable.FuzzyVariable.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/variable.html#FuzzyVariable.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.variable.FuzzyVariable.aggregate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the fuzzy sets by a unique fuzzy set computed by the aggregation operator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>operator</strong> (<em>string</em>) – {“max”|”sim”|”probor”}</p>
+<dd class="field-odd"><p><strong>operator</strong> (<em>string</em>) – {“max”|”sim”|”probor”} aggregation operator.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Nothing</p>
+<dd class="field-even"><p>A FuzzyVariable</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.FuzzyVariable.defuzzification">
-<span class="sig-name descname"><span class="pre">defuzzification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fuzzyset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'aggregation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cog'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#FuzzyVariable.defuzzification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.FuzzyVariable.defuzzification" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.variable.FuzzyVariable.compute_membership">
+<span class="sig-name descname"><span class="pre">compute_membership</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzzyset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modifiers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/variable.html#FuzzyVariable.compute_membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.variable.FuzzyVariable.compute_membership" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the value of the membership function on a specifyied point of the universe for the fuzzy set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em><em>, </em><em>numpy.array</em>) – point to evaluate the value of the membership function.</p></li>
+<li><p><strong>fuzzyset</strong> (<em>string</em>) – name of the fuzzy set.</p></li>
+<li><p><strong>modifier</strong> (<em>string</em>) – membership function modifier.</p></li>
+<li><p><strong>negation</strong> (<em>bool</em>) – returns the negation?.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A float number or numpy.array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.variable.FuzzyVariable.defuzzificate">
+<span class="sig-name descname"><span class="pre">defuzzificate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fuzzyset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_aggregation_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cog'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/variable.html#FuzzyVariable.defuzzificate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.variable.FuzzyVariable.defuzzificate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a representative crisp value for the fuzzy set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -214,8 +234,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.FuzzyVariable.get_modified_membership">
-<span class="sig-name descname"><span class="pre">get_modified_membership</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fuzzyset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#FuzzyVariable.get_modified_membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.FuzzyVariable.get_modified_membership" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.variable.FuzzyVariable.get_modified_membership">
+<span class="sig-name descname"><span class="pre">get_modified_membership</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fuzzyset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modifiers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/variable.html#FuzzyVariable.get_modified_membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.variable.FuzzyVariable.get_modified_membership" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a modified membership function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -225,200 +245,23 @@
 <li><p><strong>negation</strong> (<em>bool</em>) – When True computes the negation of the fuzzy set.</p></li>
 </ul>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.FuzzyVariable.membership">
-<span class="sig-name descname"><span class="pre">membership</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzzyset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#FuzzyVariable.membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.FuzzyVariable.membership" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the valor of the membership function on a specifyied point of the universe for the fuzzy set.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>value</strong> (<em>float</em>) – point to evaluate the value of the membership function.</p></li>
-<li><p><strong>fuzzyset</strong> (<em>string</em>) – name of the fuzzy set.</p></li>
-<li><p><strong>modifier</strong> (<em>string</em>) – membership function modifier</p></li>
-<li><p><strong>negation</strong> (<em>bool</em>) – returns the negation?</p></li>
-</ul>
-</dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A float number.</p>
+<dd class="field-even"><p>A numpy.array.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.FuzzyVariable.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">3)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#FuzzyVariable.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.FuzzyVariable.plot" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fuzzy_toolbox.mamdani.variable.FuzzyVariable.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">3)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/mamdani/variable.html#FuzzyVariable.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.mamdani.variable.FuzzyVariable.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the fuzzy sets defined for the variable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>figsize</strong> – figure size.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Nothing.</p>
+<dd class="field-odd"><p><strong>figsize</strong> (<em>tuple</em>) – figure size.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.gaussmf">
-<span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.variable.</span></span><span class="sig-name descname"><span class="pre">gaussmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#gaussmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.gaussmf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gaussian membership function.</p>
-<p>This function computes fuzzy membership values using a Gaussian membership function using NumPy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em><em>, </em><em>np.array</em>) – input value.</p></li>
-<li><p><strong>center</strong> (<em>float</em>) – Center of the distribution.</p></li>
-<li><p><strong>sigma</strong> (<em>float</em>) – standard deviation.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A numpy.array.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.gbellmf">
-<span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.variable.</span></span><span class="sig-name descname"><span class="pre">gbellmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#gbellmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.gbellmf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generalized bell-shaped membership function.</p>
-<p>This function computes fuzzy membership values using a generalized bell membership function using NumPy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em><em>, </em><em>np.array</em>) – input value.</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – standard deviation.</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – exponent.</p></li>
-<li><p><strong>c</strong> (<em>float</em>) – center.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A numpy.array.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.pimf">
-<span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.variable.</span></span><span class="sig-name descname"><span class="pre">pimf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#pimf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.pimf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pi-shaped membership function.</p>
-<p>This function computes fuzzy membership values using a pi-shaped membership function using NumPy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em><em>, </em><em>np.array</em>) – input value.</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – Left feet.</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – Left peak.</p></li>
-<li><p><strong>c</strong> (<em>float</em>) – Right peak.</p></li>
-<li><p><strong>d</strong> (<em>float</em>) – Right feet.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A numpy.array.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.sigmf">
-<span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.variable.</span></span><span class="sig-name descname"><span class="pre">sigmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#sigmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.sigmf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sigmoidal membership function.</p>
-<p>This function computes fuzzy membership values using a sigmoidal membership function using NumPy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em><em>, </em><em>np.array</em>) – input value.</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – slope.</p></li>
-<li><p><strong>c</strong> (<em>float</em>) – center.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A numpy.array.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.smf">
-<span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.variable.</span></span><span class="sig-name descname"><span class="pre">smf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#smf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.smf" title="Permalink to this definition">¶</a></dt>
-<dd><p>S-shaped membership function</p>
-<p>This function computes fuzzy membership values using a S-shaped membership function using NumPy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em><em>, </em><em>np.array</em>) – input value.</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – Left feet.</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – Right peak.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A numpy.array.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.trapmf">
-<span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.variable.</span></span><span class="sig-name descname"><span class="pre">trapmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#trapmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.trapmf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trapezoida membership function</p>
-<p>This function computes fuzzy membership values using a trapezoidal membership function using NumPy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em><em>, </em><em>np.array</em>) – input value.</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – Left feet.</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – Left peak.</p></li>
-<li><p><strong>c</strong> (<em>float</em>) – Right peak.</p></li>
-<li><p><strong>d</strong> (<em>float</em>) – Right feet.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A numpy.array.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.trimf">
-<span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.variable.</span></span><span class="sig-name descname"><span class="pre">trimf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#trimf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.trimf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Triangular membership function.</p>
-<p>This function computes fuzzy membership values using a triangular membership function using NumPy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em><em>, </em><em>np.array</em>) – input value.</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – Left feet.</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – center or peak.</p></li>
-<li><p><strong>c</strong> (<em>float</em>) – right feet.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A numpy.array.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fuzzy_toolbox.variable.zmf">
-<span class="sig-prename descclassname"><span class="pre">fuzzy_toolbox.variable.</span></span><span class="sig-name descname"><span class="pre">zmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fuzzy_toolbox/variable.html#zmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fuzzy_toolbox.variable.zmf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Z-shaped membership function</p>
-<p>This function computes fuzzy membership values using a Z-shaped membership function using NumPy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em><em>, </em><em>np.array</em>) – input value.</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – Left peak.</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – Right feet.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A numpy.array.</p>
-</dd>
-</dl>
 </dd></dl>
 
 </div>
@@ -430,7 +273,7 @@
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="rule.html" class="btn btn-neutral float-right" title="Fuzzy Rules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="index.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mf.html" class="btn btn-neutral float-left" title="Membership Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
