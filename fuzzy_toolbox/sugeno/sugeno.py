@@ -358,11 +358,14 @@ class Sugeno:
 
         X_premises = X_premises.copy()
         X_consequences = X_consequences.copy()
+        n_samples = X_premises.shape[0]
 
         if isinstance(batch_size, str) and batch_size == "auto":
             batch_size = min(200, X_premises.shape[0])
 
-        n_samples = X_premises.shape[0]
+        if batch_size is None:
+            batch_size = n_samples
+
         indexes = np.arange(n_samples)
 
         history = {"loss": []}
@@ -373,7 +376,7 @@ class Sugeno:
 
             for iter in progressbar.progressbar(range(max_iter)):
 
-                if shuffle is True:
+                if shuffle is True and n_samples > 1:
                     self.rng.shuffle(indexes)
 
                 mse_base_lr = np.mean(
