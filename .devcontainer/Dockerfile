@@ -11,6 +11,7 @@ RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/l
 
 RUN python3 -m pip install \
     numpy \
+    pandas \
     matplotlib \
     isort \
     ipykernel \

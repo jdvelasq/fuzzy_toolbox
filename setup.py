@@ -17,6 +17,7 @@ setup(
         "numpy",
         "matplotlib",
         "progressbar2",
+        "pandas",
     ],
     packages=[
         "fuzzy_toolbox",
