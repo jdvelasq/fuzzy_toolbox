@@ -342,6 +342,8 @@ class Sugeno:
         power_t=0.5,
         max_iter=10,
         warm_start=False,
+        batch_size="auto",
+        shuffle=True,
     ):
 
         if self.params is None or warm_start is False:
@@ -354,6 +356,15 @@ class Sugeno:
             self.params["coefs"] = np.tile(coefs, (NRULES, 1))
             self.params["intercepts"] = np.array([m.intercept_] * NRULES)
 
+        X_premises = X_premises.copy()
+        X_consequences = X_consequences.copy()
+
+        if isinstance(batch_size, str) and batch_size == "auto":
+            batch_size = min(200, X_premises.shape[0])
+
+        n_samples = X_premises.shape[0]
+        indexes = np.arange(n_samples)
+
         history = {"loss": []}
 
         if max_iter > 0:
@@ -362,65 +373,114 @@ class Sugeno:
 
             for iter in progressbar.progressbar(range(max_iter)):
 
+                if shuffle is True:
+                    self.rng.shuffle(indexes)
+
                 mse_base_lr = np.mean(
                     (y - self.__call__(X_premises, X_consequences)) ** 2
                 )
 
-                for param in self.params.keys():
+                for i_batch in range(0, n_samples, batch_size):
 
-                    if isinstance(self.params[param], list):
+                    batch_indexes = indexes[i_batch : i_batch + batch_size]
 
-                        for i_array, _ in enumerate(self.params[param]):
-                            for i, _ in enumerate(self.params[param][i_array]):
+                    for param in self.params.keys():
+
+                        if isinstance(self.params[param], list):
+
+                            for i_array, _ in enumerate(self.params[param]):
+                                for i, _ in enumerate(self.params[param][i_array]):
+
+                                    mse_base = np.mean(
+                                        (
+                                            y[batch_indexes]
+                                            - self.__call__(
+                                                X_premises[batch_indexes, :],
+                                                X_consequences[batch_indexes, :],
+                                            )
+                                        )
+                                        ** 2
+                                    )
+                                    self.params[param][i_array][i] += 0.001
+                                    mse_current = np.mean(
+                                        (
+                                            y[batch_indexes]
+                                            - self.__call__(
+                                                X_premises[batch_indexes, :],
+                                                X_consequences[batch_indexes, :],
+                                            )
+                                        )
+                                        ** 2
+                                    )
+                                    grad = (mse_current - mse_base) / 0.001
+                                    self.params[param][i_array][i] -= 0.001
+                                    self.params[param][i_array][i] -= lr * grad
+
+                        if (
+                            isinstance(self.params[param], np.ndarray)
+                            and len(self.params[param].shape) == 2
+                        ):
+
+                            for i_row in range(self.params[param].shape[0]):
+
+                                for i_col in range(self.params[param].shape[1]):
+
+                                    mse_base = np.mean(
+                                        (
+                                            y[batch_indexes]
+                                            - self.__call__(
+                                                X_premises[batch_indexes, :],
+                                                X_consequences[batch_indexes, :],
+                                            )
+                                        )
+                                        ** 2
+                                    )
+                                    self.params[param][i_row, i_col] += 0.001
+                                    mse_current = np.mean(
+                                        (
+                                            y[batch_indexes]
+                                            - self.__call__(
+                                                X_premises[batch_indexes, :],
+                                                X_consequences[batch_indexes, :],
+                                            )
+                                        )
+                                        ** 2
+                                    )
+                                    grad = (mse_current - mse_base) / 0.001
+                                    self.params[param][i_row, i_col] -= 0.001
+                                    self.params[param][i_row, i_col] -= lr * grad
+
+                        if (
+                            isinstance(self.params[param], np.ndarray)
+                            and len(self.params[param].shape) == 1
+                        ):
+
+                            for i in range(self.params[param].shape[0]):
 
                                 mse_base = np.mean(
-                                    (y - self.__call__(X_premises, X_consequences)) ** 2
+                                    (
+                                        y[batch_indexes]
+                                        - self.__call__(
+                                            X_premises[batch_indexes, :],
+                                            X_consequences[batch_indexes, :],
+                                        )
+                                    )
+                                    ** 2
                                 )
-                                self.params[param][i_array][i] += 0.001
+                                self.params[param][i] += 0.001
                                 mse_current = np.mean(
-                                    (y - self.__call__(X_premises, X_consequences)) ** 2
+                                    (
+                                        y[batch_indexes]
+                                        - self.__call__(
+                                            X_premises[batch_indexes, :],
+                                            X_consequences[batch_indexes, :],
+                                        )
+                                    )
+                                    ** 2
                                 )
                                 grad = (mse_current - mse_base) / 0.001
-                                self.params[param][i_array][i] -= 0.001
-                                self.params[param][i_array][i] -= lr * grad
-
-                    if (
-                        isinstance(self.params[param], np.ndarray)
-                        and len(self.params[param].shape) == 2
-                    ):
-
-                        for i_row in range(self.params[param].shape[0]):
-
-                            for i_col in range(self.params[param].shape[1]):
-
-                                mse_base = np.mean(
-                                    (y - self.__call__(X_premises, X_consequences)) ** 2
-                                )
-                                self.params[param][i_row, i_col] += 0.001
-                                mse_current = np.mean(
-                                    (y - self.__call__(X_premises, X_consequences)) ** 2
-                                )
-                                grad = (mse_current - mse_base) / 0.001
-                                self.params[param][i_row, i_col] -= 0.001
-                                self.params[param][i_row, i_col] -= lr * grad
-
-                    if (
-                        isinstance(self.params[param], np.ndarray)
-                        and len(self.params[param].shape) == 1
-                    ):
-
-                        for i in range(self.params[param].shape[0]):
-
-                            mse_base = np.mean(
-                                (y - self.__call__(X_premises, X_consequences)) ** 2
-                            )
-                            self.params[param][i] += 0.001
-                            mse_current = np.mean(
-                                (y - self.__call__(X_premises, X_consequences)) ** 2
-                            )
-                            grad = (mse_current - mse_base) / 0.001
-                            self.params[param][i] -= 0.001
-                            self.params[param][i] -= lr * grad
+                                self.params[param][i] -= 0.001
+                                self.params[param][i] -= lr * grad
 
                 mse_lr = np.mean((y - self.__call__(X_premises, X_consequences)) ** 2)
 
@@ -555,12 +615,14 @@ class Sugeno:
 #     learning_rate="invscaling",
 #     learning_rate_init=0.3,
 #     power_t=0.5,
+#     batch_size=20,
+#     shuffle=True,
 # )
 
 # plt.figure(figsize=(10, 6))
 # plt.subplot(1, 2, 1)
 # plt.plot(history["loss"])
-# # print("\n", np.mean((y2 - m(X.values, X.values)) ** 2))
+# print("\n", np.mean((y2 - m(X.values, X.values)) ** 2))
 
 # # m.fit(X.values, X.values, y2, learning_rate=0.1, max_iter=200)
 
