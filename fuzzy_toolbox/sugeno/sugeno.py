@@ -157,7 +157,7 @@ class Sugeno:
                         )
                     )
                     self.params["b"].append(np.array([delta_x / 2.0] * n_sets))
-                    self.params["c"].append(np.array([1.0] * n_sets))
+                    self.params["c"].append(np.array([0.5] * n_sets))
 
             if self.mftype == "trimf":
                 create_trimf_params()
