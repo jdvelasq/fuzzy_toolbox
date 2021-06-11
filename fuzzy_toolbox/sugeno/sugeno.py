@@ -179,12 +179,6 @@ class Sugeno:
                 low=-0.1, high=0.1, size=NRULES
             )
 
-            # m = LinearRegression()
-            # m.fit(X_consequents, y)
-            # self.coefs_ = m.coef_.reshape((1, len(m.coef_)))
-            # self.coefs_ = np.tile(self.coefs_, (NRULES, 1))
-            # self.intercept_ = np.array([m.intercept_] * NRULES)
-
         self.params = {}
 
         x_min = X_premises.min(axis=0)
@@ -350,8 +344,15 @@ class Sugeno:
         warm_start=False,
     ):
 
-        if self.params is None or warm_start is True:
+        if self.params is None or warm_start is False:
             self.create_internal_structure(X_premises, X_consequences)
+
+            NRULES = len(self.premises)
+            m = LinearRegression()
+            m.fit(X_consequences, y)
+            coefs = m.coef_.reshape((1, len(m.coef_)))
+            self.params["coefs"] = np.tile(coefs, (NRULES, 1))
+            self.params["intercepts"] = np.array([m.intercept_] * NRULES)
 
         history = {"loss": []}
 
@@ -463,7 +464,7 @@ class Sugeno:
     #         self.intercept_ = current_intercept_
     #         self.coefs_ = current_coefs_
 
-    def plot_fuzzysets(self, i_var, figsize=(8, 3)):
+    def plot_fuzzysets(self, i_var):
         #
         def plot_trimf():
 
@@ -480,7 +481,7 @@ class Sugeno:
                 membership = np.maximum(
                     0, np.minimum((x - a) / (b - a), (c - x) / (c - b))
                 )
-                plt.plot(x, membership)
+                plt.gca().plot(x, membership)
 
         def plot_gaussmf():
 
@@ -494,7 +495,7 @@ class Sugeno:
 
                 membership = np.exp(-(((x - a) / b) ** 2))
 
-                plt.plot(x, membership)
+                plt.gca().plot(x, membership)
 
         def plot_gbellmf():
 
@@ -509,7 +510,7 @@ class Sugeno:
                 c = param_c[i_fuzzy_set]
 
                 membership = 1 / (1 + np.power(((x - a) / b) ** 2, c))
-                plt.plot(x, membership)
+                plt.gca().plot(x, membership)
 
         n_sets = self.num_input_mfs[i_var]
         x_min = self.x_min[i_var]
@@ -522,9 +523,8 @@ class Sugeno:
             "gbellmf": plot_gbellmf,
         }[self.mftype]
 
-        plt.figure(figsize=figsize)
         plot_fn()
-        plt.ylim(-0.05, 1.05)
+        plt.gca().set_ylim(-0.05, 1.05)
         plt.gca().spines["left"].set_color("lightgray")
         plt.gca().spines["bottom"].set_color("gray")
         plt.gca().spines["top"].set_visible(False)
