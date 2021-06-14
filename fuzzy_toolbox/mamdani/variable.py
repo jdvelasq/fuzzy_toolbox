@@ -53,19 +53,21 @@ class FuzzyVariable:
         """
         self.sets[name] = np.array(memberships)
 
-    def plot(self, figsize=(10, 3)):
+    def plot(self, fmt="-", linewidth=2):
         """Plots the fuzzy sets defined for the variable.
 
         Args:
             figsize (tuple): figure size.
 
         """
-        plt.figure(figsize=figsize)
+
         for k in self.sets.keys():
-            plt.plot(self.universe, self.sets[k], "o-", label=k)
-        plt.legend()
-        plt.title(self.name)
-        plt.ylim(-0.05, 1.05)
+            plt.gca().plot(
+                self.universe, self.sets[k], fmt, label=k, linewidth=linewidth
+            )
+        plt.gca().legend()
+        plt.gca().set_title(self.name)
+        plt.gca().set_ylim(-0.05, 1.05)
         plt.gca().spines["left"].set_color("lightgray")
         plt.gca().spines["bottom"].set_color("gray")
         plt.gca().spines["top"].set_visible(False)
