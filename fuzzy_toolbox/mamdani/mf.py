@@ -24,8 +24,8 @@ def gaussmf(x, center=0, sigma=1):
         A numpy.array.
     """
     membership = np.exp(-((x - center) ** 2) / (2 * sigma))
-    membership = np.where(membership < 0.0001, 0.0, membership)
-    membership = np.where(membership > 0.9999, 1.0, membership)
+    membership = np.where(membership < 0.001, 0.0, membership)
+    membership = np.where(membership > 0.999, 1.0, membership)
     return membership
 
 
@@ -45,8 +45,8 @@ def gbellmf(x, a=1, b=1, c=0):
     """
 
     membership = 1 / (1 + np.abs((x - c) / a) ** (2 * b))
-    membership = np.where(membership < 0.0001, 0.0, membership)
-    membership = np.where(membership > 0.9999, 1.0, membership)
+    membership = np.where(membership < 0.001, 0.0, membership)
+    membership = np.where(membership > 0.999, 1.0, membership)
     return membership
 
 
@@ -119,8 +119,8 @@ def sigmf(x, a, c):
         A numpy.array.
     """
     membership = 1 / (1 + np.exp(-a * (x - c)))
-    membership = np.where(membership < 0.0001, 0.0, membership)
-    membership = np.where(membership > 0.9999, 1.0, membership)
+    membership = np.where(membership < 0.001, 0.0, membership)
+    membership = np.where(membership > 0.999, 1.0, membership)
     return membership
 
 
