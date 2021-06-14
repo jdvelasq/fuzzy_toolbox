@@ -23,10 +23,7 @@ def gaussmf(x, center=0, sigma=1):
     Returns:
         A numpy.array.
     """
-    membership = np.exp(-((x - center) ** 2) / (2 * sigma))
-    membership = np.where(membership < 0.001, 0.0, membership)
-    membership = np.where(membership > 0.999, 1.0, membership)
-    return membership
+    return np.exp(-((x - center) ** 2) / (2 * sigma))
 
 
 def gbellmf(x, a=1, b=1, c=0):
@@ -44,10 +41,7 @@ def gbellmf(x, a=1, b=1, c=0):
         A numpy.array.
     """
 
-    membership = 1 / (1 + np.abs((x - c) / a) ** (2 * b))
-    membership = np.where(membership < 0.001, 0.0, membership)
-    membership = np.where(membership > 0.999, 1.0, membership)
-    return membership
+    return 1 / (1 + np.abs((x - c) / a) ** (2 * b))
 
 
 def trimf(x, a, b, c):
@@ -118,10 +112,7 @@ def sigmf(x, a, c):
     Returns:
         A numpy.array.
     """
-    membership = 1 / (1 + np.exp(-a * (x - c)))
-    membership = np.where(membership < 0.001, 0.0, membership)
-    membership = np.where(membership > 0.999, 1.0, membership)
-    return membership
+    return 1 / (1 + np.exp(-a * (x - c)))
 
 
 def smf(x, a, b):
