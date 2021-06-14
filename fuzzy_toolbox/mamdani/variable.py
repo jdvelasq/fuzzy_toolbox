@@ -196,6 +196,7 @@ class FuzzyVariable:
 
         """
 
+        print(np.sum(self.sets[fuzzyset]))
         if np.sum(self.sets[fuzzyset]) == 0.0:
             return 0.0
 
