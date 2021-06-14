@@ -196,6 +196,9 @@ class FuzzyVariable:
 
         """
 
+        if np.sum(self.sets[fuzzyset]) == 0.0:
+            return 0.0
+
         if operator == "cog":
             #
             # cog: center of gravity
