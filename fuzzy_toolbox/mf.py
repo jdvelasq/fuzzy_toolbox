@@ -5,8 +5,6 @@ Membership Functions
 Functions to compute fuzzy membership values for numpy.arrays.
 
 """
-
-
 import numpy as np
 
 
