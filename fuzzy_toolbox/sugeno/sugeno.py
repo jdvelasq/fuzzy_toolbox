@@ -163,56 +163,56 @@ class Sugeno:
 
 #     sys.path.insert(0, "..")
 
-#     from mamdani.variable import FuzzyVariable
-#     from mamdani.mf import *
+# from mamdani.variable import FuzzyVariable
+# from mamdani.mf import *
 
-#     x = np.linspace(start=0, stop=20, num=200)
-#     x1 = FuzzyVariable(
-#         name="x1",
-#         universe=x,
-#         sets={
-#             "small_1": trimf(x, 0, 0, 16),
-#             "big_1": trimf(x, 10, 20, 20),
-#         },
-#     )
+# x = np.linspace(start=0, stop=20, num=200)
+# x1 = FuzzyVariable(
+#     name="x1",
+#     universe=x,
+#     sets={
+#         "small_1": trimf(x, 0, 0, 16),
+#         "big_1": trimf(x, 10, 20, 20),
+#     },
+# )
 
-#     x = np.linspace(start=0, stop=10, num=100)
-#     x2 = FuzzyVariable(
-#         name="x2",
-#         universe=x,
-#         sets={
-#             "small_2": trimf(x, 0, 0, 8),
-#             "big_2": trimf(x, 2, 10, 20),
-#         },
-#     )
+# x = np.linspace(start=0, stop=10, num=100)
+# x2 = FuzzyVariable(
+#     name="x2",
+#     universe=x,
+#     sets={
+#         "small_2": trimf(x, 0, 0, 8),
+#         "big_2": trimf(x, 2, 10, 20),
+#     },
+# )
 
-#     rule_1 = SugenoRule(
-#         antecedents=[
-#             (x1, "small_1"),
-#             (x2, "small_2"),
-#         ],
-#         consequent=lambda x1, x2: x1 + x2,
-#     )
+# rule_1 = SugenoRule(
+#     antecedents=[
+#         (x1, "small_1"),
+#         (x2, "small_2"),
+#     ],
+#     consequent=lambda x1, x2: x1 + x2,
+# )
 
-#     rule_2 = SugenoRule(
-#         antecedents=[
-#             (x1, "big_1"),
-#         ],
-#         consequent=lambda x1, x2: 2.0 * x1,
-#     )
+# rule_2 = SugenoRule(
+#     antecedents=[
+#         (x1, "big_1"),
+#     ],
+#     consequent=lambda x1, x2: 2.0 * x1,
+# )
 
-#     rule_3 = SugenoRule(
-#         antecedents=[
-#             (x2, "big_2"),
-#         ],
-#         consequent=lambda x1, x2: 3.0 * x2,
-#     )
+# rule_3 = SugenoRule(
+#     antecedents=[
+#         (x2, "big_2"),
+#     ],
+#     consequent=lambda x1, x2: 3.0 * x2,
+# )
 
-#     sugeno = Sugeno(
-#         rules=[rule_1, rule_2, rule_3],
-#         and_operator="min",
-#         or_operator="max",
-#     )
+# sugeno = Sugeno(
+#     rules=[rule_1, rule_2, rule_3],
+#     and_operator="min",
+#     or_operator="max",
+# )
 
 #     print(sugeno(x1=12, x2=5))
 
