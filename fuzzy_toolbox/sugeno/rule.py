@@ -12,7 +12,7 @@ import sys
 sys.path.insert(0, "..")
 
 
-from .mamdani.variable import FuzzyVariable
+from ..mamdani.variable import FuzzyVariable
 
 
 class SugenoRule:
