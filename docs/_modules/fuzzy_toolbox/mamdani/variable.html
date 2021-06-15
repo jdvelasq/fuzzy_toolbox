@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fuzzy_toolbox.mamdani.variable &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.0.0 documentation</title>
+  <title>fuzzy_toolbox.mamdani.variable &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.1.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.0.0
+                0.1.0
               </div>
             
           
@@ -94,7 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../variable.html">Fuzzy Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rule.html">Fuzzy Rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../mamdani.html">Mamdani fuzzy model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sugeno.html">Sugeno fuzzy model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sugeno.html">Mamdani fuzzy model</a></li>
 </ul>
 
             
@@ -216,19 +216,21 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sets</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">memberships</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FuzzyVariable.plot"><a class="viewcode-back" href="../../../variable.html#fuzzy_toolbox.mamdani.variable.FuzzyVariable.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)):</span>
+<div class="viewcode-block" id="FuzzyVariable.plot"><a class="viewcode-back" href="../../../variable.html#fuzzy_toolbox.mamdani.variable.FuzzyVariable.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Plots the fuzzy sets defined for the variable.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            figsize (tuple): figure size.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sets</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sets</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span>
+            <span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s2">&quot;lightgray&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -356,6 +358,9 @@
 <span class="sd">            A float value.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sets</span><span class="p">[</span><span class="n">fuzzyset</span><span class="p">])</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
 
         <span class="k">if</span> <span class="n">operator</span> <span class="o">==</span> <span class="s2">&quot;cog&quot;</span><span class="p">:</span>
             <span class="c1">#</span>

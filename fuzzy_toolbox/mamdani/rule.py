@@ -9,7 +9,7 @@ import numpy as np
 from .variable import FuzzyVariable
 
 
-class FuzzyRule:
+class MamdaniRule:
     """Mamdani fuzzy rule.
 
     Creates a Mamdani fuzzy fule.
@@ -306,7 +306,7 @@ class FuzzyRule:
 #     },
 # )
 
-# rule_1 = FuzzyRule(
+# rule_1 = Mamdani(
 #     antecedents=[
 #         (score, "High"),
 #         (ratio, "Goodr"),

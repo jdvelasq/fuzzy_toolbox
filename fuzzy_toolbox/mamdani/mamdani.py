@@ -6,7 +6,7 @@ Mamdani fuzzy model
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .rule import FuzzyRule
+from .rule import MamdaniRule
 from .variable import FuzzyVariable
 
 #
@@ -234,7 +234,7 @@ class Mamdani:
 #     },
 # )
 
-# rule_1 = FuzzyRule(
+# rule_1 = Mamdani(
 #     antecedents=[
 #         (score, "High"),
 #         (ratio, "Goodr"),
@@ -243,7 +243,7 @@ class Mamdani:
 #     consequent=(decision, "Approve"),
 # )
 
-# rule_2 = FuzzyRule(
+# rule_2 = Mamdani(
 #     antecedents=[
 #         (score, "Low"),
 #         (ratio, "Badr"),
@@ -300,7 +300,7 @@ class Mamdani:
 # tip["generous"] = trapmf(tip.universe, 10, 20, 25, 30)
 
 
-# rule_1 = FuzzyRule(
+# rule_1 = Mamdani(
 #     antecedents=[
 #         (service_quality, "very", "poor"),
 #         (food_quality, "extremely", "rancid"),
@@ -310,7 +310,7 @@ class Mamdani:
 # )
 
 
-# rule_2 = FuzzyRule(
+# rule_2 = Mamdani(
 #     antecedents=[
 #         (service_quality, "good"),
 #     ],
@@ -318,7 +318,7 @@ class Mamdani:
 # )
 
 
-# rule_3 = FuzzyRule(
+# rule_3 = Mamdani(
 #     antecedents=[
 #         (service_quality, "excellent"),
 #         (food_quality, "delicious"),

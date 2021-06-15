@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fuzzy_toolbox.mamdani.rule &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.0.0 documentation</title>
+  <title>fuzzy_toolbox.mamdani.rule &mdash; Fuzzy-Toolbox: A Package for building fuzzy inference systems in Python 0.1.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.0.0
+                0.1.0
               </div>
             
           
@@ -94,7 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../variable.html">Fuzzy Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rule.html">Fuzzy Rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../mamdani.html">Mamdani fuzzy model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sugeno.html">Sugeno fuzzy model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sugeno.html">Mamdani fuzzy model</a></li>
 </ul>
 
             
@@ -172,7 +172,7 @@
 <span class="kn">from</span> <span class="nn">.variable</span> <span class="kn">import</span> <span class="n">FuzzyVariable</span>
 
 
-<div class="viewcode-block" id="FuzzyRule"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.FuzzyRule">[docs]</a><span class="k">class</span> <span class="nc">FuzzyRule</span><span class="p">:</span>
+<div class="viewcode-block" id="MamdaniRule"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.MamdaniRule">[docs]</a><span class="k">class</span> <span class="nc">MamdaniRule</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mamdani fuzzy rule.</span>
 
 <span class="sd">    Creates a Mamdani fuzzy fule.</span>
@@ -223,20 +223,20 @@
             <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">text</span>
 
-<div class="viewcode-block" id="FuzzyRule.get_consequent_universe"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.FuzzyRule.get_consequent_universe">[docs]</a>    <span class="k">def</span> <span class="nf">get_consequent_universe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MamdaniRule.get_consequent_universe"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.MamdaniRule.get_consequent_universe">[docs]</a>    <span class="k">def</span> <span class="nf">get_consequent_universe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets the universe of the fuzzy variable in the consquent.&quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">universe</span></div>
 
-<div class="viewcode-block" id="FuzzyRule.get_consequent_membership"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.FuzzyRule.get_consequent_membership">[docs]</a>    <span class="k">def</span> <span class="nf">get_consequent_membership</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MamdaniRule.get_consequent_membership"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.MamdaniRule.get_consequent_membership">[docs]</a>    <span class="k">def</span> <span class="nf">get_consequent_membership</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets the membership of the fuzzy variable in the consquent.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span></div>
 
-<div class="viewcode-block" id="FuzzyRule.get_consequent_name"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.FuzzyRule.get_consequent_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_consequent_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MamdaniRule.get_consequent_name"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.MamdaniRule.get_consequent_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_consequent_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets the name of the fuzzy variable in the consquent.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">consequent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span></div>
 
-<div class="viewcode-block" id="FuzzyRule.compute_inference"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.FuzzyRule.compute_inference">[docs]</a>    <span class="k">def</span> <span class="nf">compute_inference</span><span class="p">(</span>
+<div class="viewcode-block" id="MamdaniRule.compute_inference"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.MamdaniRule.compute_inference">[docs]</a>    <span class="k">def</span> <span class="nf">compute_inference</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">and_operator</span><span class="p">,</span> <span class="n">or_operator</span><span class="p">,</span> <span class="n">implication_operator</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes the output fuzzy set of the rule.</span>
@@ -252,7 +252,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">combine_inputs</span><span class="p">(</span><span class="n">and_operator</span><span class="p">,</span> <span class="n">or_operator</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_implication</span><span class="p">(</span><span class="n">implication_operator</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzyRule.compute_memberships"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.FuzzyRule.compute_memberships">[docs]</a>    <span class="k">def</span> <span class="nf">compute_memberships</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">):</span>
+<div class="viewcode-block" id="MamdaniRule.compute_memberships"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.MamdaniRule.compute_memberships">[docs]</a>    <span class="k">def</span> <span class="nf">compute_memberships</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes the memberships of the antecedents.</span>
 
 <span class="sd">        Args:</span>
@@ -274,7 +274,7 @@
             <span class="n">membership</span> <span class="o">=</span> <span class="n">fuzzyvar</span><span class="o">.</span><span class="n">compute_membership</span><span class="p">(</span><span class="n">crisp_value</span><span class="p">,</span> <span class="n">fuzzyset</span><span class="p">,</span> <span class="n">modifiers</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">memberships</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">membership</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzyRule.combine_inputs"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.FuzzyRule.combine_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">combine_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">and_operator</span><span class="p">,</span> <span class="n">or_operator</span><span class="p">):</span>
+<div class="viewcode-block" id="MamdaniRule.combine_inputs"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.MamdaniRule.combine_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">combine_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">and_operator</span><span class="p">,</span> <span class="n">or_operator</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes the firing strength of the rule.</span>
 
 <span class="sd">        Args:</span>
@@ -311,7 +311,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">combined_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memberships</span></div>
 
-<div class="viewcode-block" id="FuzzyRule.compute_implication"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.FuzzyRule.compute_implication">[docs]</a>    <span class="k">def</span> <span class="nf">compute_implication</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">implication_operator</span><span class="p">):</span>
+<div class="viewcode-block" id="MamdaniRule.compute_implication"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.MamdaniRule.compute_implication">[docs]</a>    <span class="k">def</span> <span class="nf">compute_implication</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">implication_operator</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes the implication of the rule.</span>
 
 <span class="sd">        Args:</span>
@@ -346,7 +346,7 @@
             <span class="n">sets</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rule_output&quot;</span><span class="p">:</span> <span class="n">membership</span><span class="p">},</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzyRule.plot"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.FuzzyRule.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
+<div class="viewcode-block" id="MamdaniRule.plot"><a class="viewcode-back" href="../../../rule.html#fuzzy_toolbox.mamdani.rule.MamdaniRule.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">and_operator</span><span class="o">=</span><span class="s2">&quot;prod&quot;</span><span class="p">,</span>
         <span class="n">or_operator</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
@@ -469,7 +469,7 @@
 <span class="c1">#     },</span>
 <span class="c1"># )</span>
 
-<span class="c1"># rule_1 = FuzzyRule(</span>
+<span class="c1"># rule_1 = Mamdani(</span>
 <span class="c1">#     antecedents=[</span>
 <span class="c1">#         (score, &quot;High&quot;),</span>
 <span class="c1">#         (ratio, &quot;Goodr&quot;),</span>

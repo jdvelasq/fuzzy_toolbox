@@ -58,6 +58,8 @@ def trimf(x, a, b, c):
     Returns:
         A numpy.array.
     """
+    a = np.where(a == b, a - 1e-4, a)
+    c = np.where(b == c, c + 1e-4, c)
     return np.where(
         x <= a,
         0,
@@ -154,6 +156,9 @@ def trapmf(x, a, b, c, d):
     Returns:
         A numpy.array.
     """
+
+    a = np.where(a == b, a - 1e-4, a)
+    d = np.where(d == c, d + 1e-4, d)
 
     return np.where(
         x <= a,
