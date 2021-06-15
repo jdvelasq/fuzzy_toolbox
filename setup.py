@@ -23,6 +23,7 @@ setup(
         "fuzzy_toolbox",
         "fuzzy_toolbox.mamdani",
         "fuzzy_toolbox.sugeno",
+        "fuzzy_toolbox.anfis",
     ],
     package_dir={"fuzzy_toolbox": "fuzzy_toolbox"},
     include_package_data=True,
