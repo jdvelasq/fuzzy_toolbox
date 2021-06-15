@@ -1,1 +1,1 @@
-from .sugeno import *
+from .anfis import *
