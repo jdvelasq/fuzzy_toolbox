@@ -80,7 +80,7 @@ class FuzzyVariable:
             labels=list(self.sets.keys()),
             title=self.name,
             fmt=fmt,
-            linewidth=2,
+            linewidth=linewidth,
             view_xaxis=True,
             view_yaxis=True,
         )
